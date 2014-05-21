@@ -1,0 +1,10 @@
+AddDefaultCharset UTF-8
+
+RewriteEngine on
+RewriteBase /
+
+RewriteRule ^(.*)(\.htc|\.jpg|\.gif|\.jpeg|\.css|\.js|\.xml|\.xsl|\.png|\.html|\.htm|\.ico|\.swf)$ $1$2 [NC,L]
+#RewriteRule ^notfound\/?$ notfound.html [NC,QSA,L]
+
+RewriteRule ^getPhotos\/(.+)\/?.*$ getPhotos/index.php [NC,QSA,L]
+

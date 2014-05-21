@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html><head>
+<title>Фазлы - фотопазлы</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="description" content="Пазл из любого изображения. Делитесь ссылками на свои пазлы в соцсетях. Подходит как взрослым, так и детям. Есть минутка - фазлы!">
+<meta name="keywords" content="Пазлы, развлечения, фото, фотопазлы, фазлы">
+<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+
+<link rel="icon" href="/favicon.png">
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon32.png"> 
+
+<link href='skin/style.css' rel='stylesheet' type='text/css'>
+<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+<script src='js/puzzle.js'></script>
+
+</head><body>
+<div id='step1' style='display: none'>
+	<header class='top'>
+		<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span></li>	
+		<a class='topItem' href='/getPhotos/yfd'>Фото дня</a>
+		<a class='logo30 topItem' href='/' title='Фотопазлы'></a></li>
+	</header>	
+	<div id='step1Inside'>
+		<form  method='GET' action=''>
+			<h1>Фотопазлы из любого изображения</h1>
+			<p>Добро пожаловать на проект фотопазлы! Вы можете сделать пазл из любого изображения, поместив его URL в форму:
+			<div class='nobr'><input placeholder='URL изображения' name='img' value='' size='50'>
+			<input type='submit' value='Создать'>
+			</div>
+			</p>
+		</form>
+		<p>Или выбрать одно из <a href="/getPhotos/yfd">"Фото дня"</a></p>
+	</div>	
+</div>	
+	
+	<div id='step2'  style='display: none'> 
+		<header class='top'>
+			<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span>		
+			<a class='topItem logo30' href='/' title='Фотопазлы'></a>
+			<a class='topItem' href="/">Изменить картинку</a> 
+			<div  class='topItem'>
+				<form method='GET' action=''>
+					<input id='currentImg' type='hidden' name='img' value=''>
+					Изменить сложность: 
+					<select id='currentImgComplexity' name='complexity' onchange='this.form.submit();'>
+					</select>		
+				</form>	
+			</div>	
+		</header>	
+
+		<div id='puzzle'>
+		</div>
+	</div>	
+	
+	<div id='cover' style='display: none'>
+		<div class='coverDark'></div>
+		<div id='coverText'></div>
+		<div id='coverWnd'>
+			<div id='coverWndHeader'></div>
+			<div id='coverWndInside'></div>
+			<i id='coverWndX' class='__icon closeWindow'></i>
+		</div>
+	</div>
+	
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51202174-1', 'phuzzle.ru');
+  ga('send', 'pageview');
+
+</script>	
+</body></html>
