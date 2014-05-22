@@ -5,70 +5,63 @@ namespace GetPhotos\Controller;
  * @author vsamoylov
  */
 abstract class SocialAuth extends \Common\Controller {
-	
-	protected $default = 'auth';
+
 	/**
-	 * Здесь храним подготовленные данные, полученные об юзере от провайдера,
-	 * @var array
+	 * Сюда потомки кладут название сети
+	 * @var string
 	 */
-	protected $profile;	
+	protected $name;
+	protected $model;
 	
-	abstract protected function getOauthUrl();
 	/**
-	 * Запускаем процесс авторизации через соцсеть
+	 * Отдает фотографии для авторизованного пользователя
 	 */
-	protected function authAction() {
-		\Utils\redirect($this->getOauthUrl());
+	abstract protected function getPhotos($_authParams);
+	abstract protected function createModel($_params);
+	
+	function __construct() {
+		$params = \Config::$providers[$this->name];
+		$params['retpath'] = HTTP_PROJECT_BEGIN . $this->name . '/callback';
+		$this->model = $this->createModel($params);
+		session_start();
+	}
+	
+	protected function indexAction() {
+		//Проверяем, нет ли в сессии уже данных
+		$varName = $this->getSessionVarName();
+		if (isset($_SESSION[$varName]) && is_array($_SESSION[$varName]) && 0 < sizeof($_SESSION[$varName])) {
+			return $this->getPhotos($_SESSION[$varName]);
+		}
+		$this->model->step1();
+		//После этого идет редирект на соцсеть и сюда никто не приходит
+		exit;
 	}
 	
 	protected function callbackAction() {
-		$profile = $this->getProfile();
-		//Array ( [login] => 100001802922898 [nick] => Василий Самойлов [email] => sam_vm@mail.ru ) 
-		//надо проверить, есть ли такой юзер. 
-		//Если есть, то переходим под него, иначе - запоминаем в сессии и переходим на регистрацию
-		$profile['login'] .=  '@' . $this->provider['name'];
-/*
-Так получаем альбомы:
-https://api.vk.com/method/photos.getAlbums?owner_id=76700449&need_system=1&need_covers=1&callback=myfunc
-Так получаем фоты из альбомов
-https://api.vk.com/method/photos.get?owner_id=76700449&album_id=107587158&callback=myfunc
- */		
-		var_dump($profile);
-		
+		$varName = $this->getSessionVarName();
+		$token = $this->model->getToken();
+		$_SESSION[$varName]['token'] = $token;
+		$profile = $this->model->getProfile($token);
+		$_SESSION[$varName]['profile'] = $profile;
+		\Utils\redirect(HTTP_PROJECT_BEGIN . $this->name . '/');
 	}
 	
-	/**
-	 * Возвращает подготовленный параметр retpath для передачи провайдеру
-	 * @return string
-	 */
-	protected function getRetpathForProvider() {
-		return 'http://' . $_SERVER['HTTP_HOST']. DIRECTORY_SEPARATOR 
-			. \GetPhotos\Config::PROJECT_NAME . DIRECTORY_SEPARATOR
-			. $this->provider['name'] . '/callback';
+	protected function logoutAction() {
+		$this->clearSessionData();
+		\Utils\redirect(HTTP_PROJECT_BEGIN);
 	}
-	/**
-	 * Вспомогательная - обращение через иницилизированный curl для получения ответа в формате json
-	 * @param type $_curl
-	 * @return type
-	 * @throws Exception
-	 */
-	/*
-	protected function getJsonFromCurl($_curl) {
-		curl_setopt($_curl, CURLOPT_RETURNTRANSFER, 1);
-		$result = curl_exec($_curl);
-		$error = curl_error($_curl);
-		curl_close($_curl);
-		if ($error) {
-			throw new Exception(__METHOD__ . ' curl error: ' . $error);
-		}
-		$json = @json_decode($result);
-		if (!$json) {
-			throw new Exception(__METHOD__ . ' curl return not json: ' . $result);
-		}
-		return $json;
+
+	protected function getSessionVarName() {
+		return 'authBy'.$this->name;
 	}
-	*/
-	abstract protected function getProfile();
+
+	protected function getSessionData() {
+		$varName = $this->getSessionVarName();
+		return isset($_SESSION[$varName]) ? $_SESSION[$varName] : array();
+	}
 	
+	protected function clearSessionData() {
+		$_SESSION[$this->getSessionVarName()] = array();
+	}
 }
 

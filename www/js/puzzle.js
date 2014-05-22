@@ -256,9 +256,9 @@ var puzzle = (function(){
 var App = (function($) {
 	var  complexityAr = [[3, 3]
 			, [5, 5]
-			, [10, 10]
+			, [9, 9]
+			, [15, 15]
 			, [25, 25]
-			, [50, 50]
 		];
 	var cover = {
 		on: function coverOn(_text) {
@@ -329,8 +329,7 @@ var App = (function($) {
 		if (!getVars.img) {
 			return showStep1();
 		}
-		getVars.img = getVars.img.replace(/[^-a-zA-Z0-9\._:&\/]+/, '');
-		
+		getVars.img = getVars.img.replace(/[^-a-zA-Z0-9\._:&=\?\/]+/, '');
 		var complexityIdx = parseInt(getVars.complexity);
 		if (!complexityAr[complexityIdx]) {
 			complexityIdx = 0;
@@ -369,7 +368,8 @@ var App = (function($) {
 	});
 	return {
 		about: function() {
-			cover.wnd('О проекте', 'По всем вопросам обращайтесь по адресу devphuzzle@gmail.com');
+			cover.wnd('О проекте'
+				, 'Автор: Василий Самойлов. <br>По всем вопросам обращайтесь по адресу devphuzzle' + '@' + 'gmail.com');
 		}
 		,  popup: function(_url) {
 			window.open(_url,'','toolbar=0,status=0,width=626,height=436');

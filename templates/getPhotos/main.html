@@ -7,16 +7,23 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="icon" href="/favicon.png">
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon32.png"> 
+
 <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
 <link href='/skin/style.css' rel='stylesheet' type='text/css'>
 
 <script>
 function makeLinkToPhuzzle(_imgSrc, _body) {
-	return '<a href="/index.html?complexity=1&img=' + _imgSrc + '">'+_body+'</a>';
+	return '<a href="/index.html?complexity=1&img=' + encodeURIComponent(_imgSrc) + '">'+_body+'</a>';
 }			
 </script>
 </head><body>
 	<h1>Фотопазлы - выбор фотографии</h1>
+	<div id="photos"></div>
+
 	<div><?=$content?></div>
 	
 <script>

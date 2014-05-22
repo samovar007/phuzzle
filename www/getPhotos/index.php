@@ -1,14 +1,17 @@
 <?php
 define('BR', "\n");
 define('PROJECT_ROOT', realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR);
+define('PROJECT_NAME', 'getPhotos');
+define('HTTP_PROJECT_BEGIN', 'http://' . $_SERVER['HTTP_HOST'] . '/' . PROJECT_NAME . '/');
 
 require PROJECT_ROOT . 'namespaces/autoload.php';
-use GetPhotos\Config as Config;	
+require PROJECT_ROOT . 'config/Config.php';
+
 try {
 	//Иницилизация шаблонизатора
-	\Common\Templater::setRoot(PROJECT_ROOT . 'templates' . DIRECTORY_SEPARATOR . Config::PROJECT_NAME);
+	\Common\Templater::setRoot(PROJECT_ROOT . 'templates' . DIRECTORY_SEPARATOR . PROJECT_NAME);
 
-	$controller = \Common\Controller::factory(Config::PROJECT_NAME, $_SERVER['REQUEST_URI'], 'Index');
+	$controller = \Common\Controller::factory(PROJECT_NAME, $_SERVER['REQUEST_URI'], 'Index');
 
 	echo \Common\Templater::render('main.html'
 		, array('content' => $controller->doit())
