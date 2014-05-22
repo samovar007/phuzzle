@@ -18,11 +18,10 @@
 			throw new Error('Не удалось получить фото');
 		}
 		var str = '';
-console.log(_data.entries);		
 		_data.entries.forEach(function(_el){
 			str += makeLinkToPhuzzle(_el.img.XXXL.href, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">');
 		});
-		$('#photos').html(str);
+		$('#photos').html('<div class="albumData">' + str + '</div>');
 	}
 
 	jsonp('http://api-fotki.yandex.ru/api/podhistory/?format=json&callback=showYfd');

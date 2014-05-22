@@ -8,7 +8,6 @@ var okPhotos = (function($){
 			if (!_data || !_data.photos) {
 				return;
 			}
-			//console.log(_data);
 			gotAlbumsData[_aid] = 1;
 			var $album = $('#album' + _aid);
 			_data.photos.forEach(function(_el){
