@@ -12,47 +12,70 @@
 
 <link href='skin/style.css' rel='stylesheet' type='text/css'>
 <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
-<script src='js/puzzle.js'></script>
+<script src='/js/app.js'></script>
+<script src='/js/puzzle.js'></script>
 
 </head><body>
 <div id='step1' style='display: none'>
 	<header class='top'>
-		<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span></li>	
+		<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span>
 		<a class='topItem' href='/getPhotos/yfd'>Фото дня</a>
 		<a class='topItem snicon ok' href='/getPhotos/ok'></a>
 		<a class='topItem snicon vk' href='/getPhotos/vk'></a>
-		<a class='logo30 topItem' href='/' title='Фотопазлы'></a></li>
-	</header>	
-	<div id='step1Inside'>
-		<form  method='GET' action=''>
-			<h1>Фотопазлы из любого изображения</h1>
-			<p>Добро пожаловать на проект фотопазлы! Вы можете сделать пазл из любого изображения, поместив его URL в форму:
-			<div class='nobr'><input placeholder='URL изображения (http://...)' name='img' value='' size='50'>
-			<input type='submit' value='Создать'>
+		<a class='logo30 topItem' href='/' title='Фотопазлы'></a>
+	</header>
+	<div class="container text-center">
+		<h1>Фотопазлы из любого изображения</h1>
+		<section class="select-block">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="inner-block">
+						<h2>Выберите изображение из вашей социальной сети:</h2>
+						<a class="snicon ok" href="/getPhotos/ok"></a>
+						<a class="snicon vk" href="/getPhotos/vk"></a>
+					</div>	
+				</div>
+				<div class="col-md-4">
+					<div class="inner-block">
+						<h2>Найдите понравившееся изображение в категории <a href="/getPhotos/yfd">“Фото дня”</a>:</h2>
+						<div class="row" id='yfdExamplePlace'></div>
+					</div>	
+				</div>
+				<div class="col-md-4">
+					<div class="inner-block">
+						<h2>Или вставьте адрес картинки здесь:</h2>
+						<form class="nobr clearfix" action="" method="GET">
+							<input class="url-input" size="50" value="" name="img" placeholder="Пример: http://phuzzle.myarea.ru/example.jpg">
+							<input class="btn" type="submit" value="Создать">
+						</form>
+					</div>		
+				</div>
 			</div>
-			</p>
-		</form>
-		<p>Либо выбрать одно из <a href='/getPhotos/yfd'>"Фото дня"</a>
-			или фото из социальных сетей: 
-			<a href='/getPhotos/ok' class='snicon ok'></a>
-			<a href='/getPhotos/vk' class='snicon vk'></a>
-		</p>
-	</div>	
-</div>	
+		</section>
+		<section class="example-block">		
+			<h2>Получите готовый пазл!</h2>
+			<div class="row">
+				<div class="col-xs-5">
+					<img src="example.jpg" class="img-responsive" alt=""/>
+				</div>
+				<div class="col-xs-2 arrow-block">
+					<img src="img/arrow.png" class="img-responsive" alt="arrow">
+				</div>
+				<div class="col-xs-5">
+					<img src="example-puzzle.jpg" class="img-responsive" alt=""/>
+				</div>
+			</div>
+		</div>	
+	</div>
 	
 	<div id='step2'  style='display: none'> 
 		<header class='top'>
 			<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span>		
 			<a class='topItem logo30' href='/' title='Фотопазлы'></a>
-			<a class='topItem' href="/">Изменить картинку</a> 
-			<div  class='topItem'>
-				<form method='GET' action=''>
-					<input id='currentImg' type='hidden' name='img' value=''>
-					Изменить сложность: 
-					<select id='currentImgComplexity' name='complexity' onchange='this.form.submit();'>
-					</select>		
-				</form>	
-			</div>	
+			<a class='topItem' href="/">Изменить <span class="xs-hidden">картинку</span></a> 
+			<div class='topItem withSubmenu'><div class='submenuHeader'>Сложность ▼</div>
+				<menu class='submenu' id='currentImgComplexity'></menu>
+			</div>
 		</header>	
 
 		<div id='puzzle'>
@@ -65,7 +88,7 @@
 		<div id='coverWnd'>
 			<div id='coverWndHeader'></div>
 			<div id='coverWndInside'></div>
-			<i id='coverWndX' class='__icon closeWindow'></i>
+			<i class='__icon closeWindow'></i>
 		</div>
 	</div>
 	

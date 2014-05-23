@@ -1,17 +1,6 @@
 /*
  * Проверка браузера
  */
-(function(){
-	var node = document.createElement('canvas');
-	if (!(window.jQuery 
-		&& node.getContext 
-		&& node.addEventListener 
-		&& node.getBoundingClientRect 
-		&& Array.prototype.forEach
-		)) {
-		return alert('К сожалению, ваш браузер не может быть использован для данного приложения');
-	}
-})();
 
 var puzzle = (function(){
 		var   X_CNT	//количество клеток в ширину
@@ -250,53 +239,57 @@ var puzzle = (function(){
 	return puzzle;
 }());
 
+
 /* 
  * Интерфейс
  */
-var App = (function($) {
+(function($) {
 	var  complexityAr = [[3, 3]
 			, [5, 5]
 			, [9, 9]
 			, [15, 15]
 			, [25, 25]
 		];
-	var cover = {
-		on: function coverOn(_text) {
-			$('#coverText').html(_text).show();
-			$('#coverWnd').hide();
-			$('#cover').show();
-		}
-		, off: function coverOff() {
-			$('#cover').hide();
-		}
-		, wnd: function coverWnd(_header, _text) {
-			$('#coverText').hide();
-			$('#coverWndHeader').html(_header);
-			$('#coverWndInside').html(_text);
-			$('#coverWnd').show();
-			$('#cover').show();
-		}
-		, init: function coverInit() {
-			$('#coverWnd i').on('click', cover.off);
-		}
-	};
 	//Если каких-то данных нет...
 	function showStep1() {
-		$('#step1').show()
+		App.showYfd = function(_data) {
+			var $container = $('#yfdExamplePlace');
+			if (!_data.entries ||!_data.entries.length) {
+				return;
+			}
+			var str = '';
+			_data.entries.forEach(function(_el){
+				str += '<div class="col-xs-4">' + makeLinkToPhuzzle(_el.img.XXXL.href, 1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">') + '</div>';
+			});
+			$container.html(str);
+		}	
+		App.jsonp('http://api-fotki.yandex.ru/api/podhistory/?limit=3&format=json&callback=App.showYfd');
+		$('#step1').show();
 		$('#step2').hide();
 	}
 	function showStep2(_imgSrc, _complexityIdx) {
 		$('#step2').show();
 		$('#step1').hide();
-		
+
 		$('#currentImg').val(_imgSrc);
 		var options = '';
 		complexityAr.forEach(function(_el, _idx){
-			options += '<option value="' + _idx + '"' 
-				+ (_complexityIdx == _idx ? ' SELECTED = selected>' : '>')
-				+ _el.join('x') + '</option>';
+			if (_complexityIdx == _idx) {
+				options += '<span>' + _el.join('x') + '</span>';
+			} else {
+				options += makeLinkToPhuzzle(_imgSrc, _idx, _el.join('x'));
+			}	
 		});
 		$('#currentImgComplexity').html(options);
+	
+		//$item = $('#currentImgComplexity').parent();
+		$('.topItem.withSubmenu .submenuHeader').hover(function() {
+			$('.topItem.withSubmenu .submenu').hide();
+			$('.submenu', $(this).parent()).show();
+		});
+		$('.topItem.withSubmenu .submenu').mouseleave(function() { 
+			$(this).hide();
+		});
 	}
 	
     function wordEnding(_digit, _ending) {
@@ -313,7 +306,6 @@ var App = (function($) {
     }
 
 	$(document).ready(function() {
-		cover.init();
 		//Иницилизация
 		var url = window.location.search;
 		if (!url) {
@@ -336,7 +328,7 @@ var App = (function($) {
 		}
 		showStep2(getVars.img, complexityIdx);
 
-		cover.on('Загружаю рисунок...');
+		App.cover.text('Загружаю рисунок...');
 		puzzle.run(getVars.img
 			, document.getElementById('puzzle')
 			, complexityAr[complexityIdx]
@@ -358,72 +350,12 @@ var App = (function($) {
 						+ '<a target=_blank href="#" class="snicon gg" onclick="return App.popup(App.sharing.gg());"></a>'
 						+ '<a target=_blank href="#" class="snicon fb" onclick="return App.popup(App.sharing.fb());"></a>'
 						+ '</div>';
-					cover.wnd('Пазл собран!', wndBody);
+					App.cover.wnd('Пазл собран!', wndBody);
 				}
 				, successLoad: function(_cells) {
-					cover.off();
+					App.cover.off();
 				} 
 			}
 		);
 	});
-	return {
-		about: function() {
-			cover.wnd('О проекте'
-				, 'Автор: Василий Самойлов. <br>По всем вопросам обращайтесь по адресу devphuzzle' + '@' + 'gmail.com');
-		}
-		,  popup: function(_url) {
-			window.open(_url,'','toolbar=0,status=0,width=626,height=436');
-			return false;
-		}
-		, sharing:  {
-			url: ''
-			, title: ''
-			, img: ''
-			, txt: ''
-			, init: function(_url, _title, _img, _text) {
-				this.url = _url;
-				this.title = _title;
-				this.img = _img;
-				this.txt = _text;
-			}
-			, vk: function() {
-				return 'http://vkontakte.ru/share.php'
-					+ '?url='          + encodeURIComponent(this.url)
-					+ '&title='       + encodeURIComponent(this.title)
-					+ '&description=' + encodeURIComponent(this.txt)
-					+ '&image='       + encodeURIComponent(this.img)
-					+ '&noparse=true';
-			}
-			, ok: function() {
-				return 'http://www.odnoklassniki.ru/dk?st.cmd=addShare'
-					+ '&st.comments=' + encodeURIComponent(this.txt)
-					+ '&st._surl='    + encodeURIComponent(this.url);
-			}
-			, fb: function() {
-				return 'http://www.facebook.com/sharer.php?s=100'
-					+ '&p[title]='     + encodeURIComponent(this.title)
-					+ '&p[summary]='   + encodeURIComponent(this.txt)
-					+ '&p[url]='       + encodeURIComponent(this.url)
-					+ '&p[images][0]=' + encodeURIComponent(this.img);
-			}
-			, tw: function() {
-				return 'http://twitter.com/share';
-					+ '?text='      + encodeURIComponent(this.title)
-					+ '&url='      + encodeURIComponent(this.url)
-					+ '&counturl=' + encodeURIComponent(this.url);
-			}
-			, mr: function() {
-				return 'http://connect.mail.ru/share'
-					+ '?url='          + encodeURIComponent(this.url)
-					+ '&title='       + encodeURIComponent(this.title)
-					+ '&description=' + encodeURIComponent(this.txt)
-					+ '&imageurl='    + encodeURIComponent(this.img);
-			}
-			, gg: function() {
-				return 'https://plus.google.com/share'
-					+ '?url='          + encodeURIComponent(this.url)
-					;	
-			}
-		}
-	};
 }(jQuery));

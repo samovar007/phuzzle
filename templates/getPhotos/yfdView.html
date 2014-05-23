@@ -1,28 +1,28 @@
 <!-- script type='application/json' src='http://api-fotki.yandex.ru/api/podhistory/'></script -->	
 <div id='photos'></div>
 <script>
-	
-	/**
-	 * формирует и посылает jsonp запрос
-	 */
-	function jsonp(_src) {
-		var s = document.getElementsByTagName('script')[0], n = document.createElement('script');
-		n.type = 'text/javascript';
-		n.async = true;
-		n.src = _src;
-		s.parentNode.insertBefore(n, s);
-	}	
-
-	function showYfd(_data) {
+	function showYfd(_header, _data) {
 		if (!_data.entries ||!_data.entries.length) {
 			throw new Error('Не удалось получить фото');
 		}
 		var str = '';
 		_data.entries.forEach(function(_el){
-			str += makeLinkToPhuzzle(_el.img.XXXL.href, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">');
+			str += makeLinkToPhuzzle(_el.img.XXXL.href, 1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">');
 		});
-		$('#photos').html('<div class="albumData">' + str + '</div>');
+		$('#photos').append('<h2>' + _header + '</h2><div class="albumData">' + str + '</div>');
+	}
+	var showPodhistory = function(_data) {
+		showYfd('Коллекция "Фото дня" от Яндекса', _data);
+	}
+	var showRecent = function(_data) {
+		showYfd('Коллекция "Новые интересные фото" от Яндекса', _data);
+	}
+	var showTop = function(_data) {
+		showYfd('Коллекция "Популярные фотографии" от Яндекса', _data);
 	}
 
-	jsonp('http://api-fotki.yandex.ru/api/podhistory/?format=json&callback=showYfd');
+	
+	App.jsonp('http://api-fotki.yandex.ru/api/podhistory/?limit=15&format=json&callback=showPodhistory');
+	App.jsonp('http://api-fotki.yandex.ru/api/recent/?limit=15&format=json&callback=showRecent');
+	App.jsonp('http://api-fotki.yandex.ru/api/top/?limit=15&format=json&callback=showTop');
 </script>	

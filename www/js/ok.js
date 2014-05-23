@@ -1,5 +1,5 @@
 var okPhotos = (function($){
-	var $container = $('#photos').append('<div id="album0"></div><h2>Альбомы</h2>');
+	var $container = $('#photos').append('<div id="album0" class="albumData"></div><h2>Альбомы</h2>');
 	var gotAlbumsData = {};
 
 	function getAlbumPhotos(_aid) {
@@ -11,7 +11,7 @@ var okPhotos = (function($){
 			gotAlbumsData[_aid] = 1;
 			var $album = $('#album' + _aid);
 			_data.photos.forEach(function(_el){
-				$(makeLinkToPhuzzle(_el.pic640x480, '<img src="' + _el.pic128x128 + '">'))
+				$(makeLinkToPhuzzle(_el.pic640x480, 1, '<img src="' + _el.pic128x128 + '">'))
 					.appendTo($album);
 			});
 			$album.removeClass('displayNone');
