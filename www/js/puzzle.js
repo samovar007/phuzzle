@@ -12,8 +12,8 @@ var puzzle = (function(){
 		, containerBox
 		, callbacks	//калбаки на некоторые события
 		, timer
-		, borderHeight = 5	
-		, borderWidth = 5
+		, borderHeight = 6	
+		, borderWidth = 6
 		, newFrame = (window.requestAnimationFrame
 			|| window.msRequestAnimationFrame
 			|| window.webkitRequestAnimationFrame
@@ -38,7 +38,7 @@ var puzzle = (function(){
 		, isFree: function() {
 			return this.node == null;
 		}
-		, run: function(_imgSrc, _container, _xy, _callbacks) {
+		, run: function(_imgSrc, _container, _xy, _callbacks, _helpNode) {
 			X_CNT = _xy[0];
 			Y_CNT = _xy[1];
 			callbacks = _callbacks || {};
@@ -60,10 +60,10 @@ var puzzle = (function(){
 				//Надо вычислить коеффициент, на который будем уменьшать картинку
 				var koef = Math.min(containerWidth/img.width, containerHeight/img.height);
 				//Размеры клетки на канве
-				var xImgSz = Math.floor(img.width/X_CNT)
-					, yImgSz = Math.floor(img.height/Y_CNT)
-					, xImgBorder = Math.floor(borderWidth/koef)
+				var xImgBorder = Math.floor(borderWidth/koef)
 					, yImgBorder = Math.floor(borderHeight/koef)
+					, xImgSz = Math.floor((img.width + 2*xImgBorder)/X_CNT)
+					, yImgSz = Math.floor((img.height + 2*yImgBorder)/Y_CNT)
 					;
 				xCellSz = Math.floor(Math.ceil(koef * img.width)/X_CNT);
 				yCellSz = Math.floor(Math.ceil(koef * img.height)/Y_CNT);
@@ -166,12 +166,61 @@ var puzzle = (function(){
 							, dHeight 
 							);
 						container.appendChild(canvas);	
-						//ловим событие 
-						//canvas.addEventListener('mousedown', hold);		
 						//кладем в массив канв, через который можно всегда определить место в контейнере
 						nodes[x][y] = canvas;
 					}			
 				}
+				//Формируем канву-подсказку
+				if (_helpNode) {
+					var canvas = document.createElement('canvas')
+						, ctx = canvas.getContext('2d');
+					canvas.style.position = 'absolute';
+					canvas.style.left = 0;
+					canvas.style.top = 0; 
+					canvas.style.display= 'none';
+					resizeCanvas(canvas, xCellSz * X_CNT, yCellSz * Y_CNT);
+					ctx.fillStyle = 'black';
+					ctx.fillRect(0, 0, xCellSz * X_CNT, yCellSz * Y_CNT);
+					ctx.lineWidth = 1;
+					ctx.strokeStyle = "white";
+					ctx.strokeRect(borderWidth-2, borderHeight-2,  xCellSz * X_CNT - 2 * (borderWidth - 2), yCellSz * Y_CNT - 2 * (borderHeight-2));
+					ctx.drawImage(this
+						, 0, 0 
+						, xImgSz * X_CNT - 2 * xImgBorder , yImgSz * Y_CNT - 2 * yImgBorder
+						, borderWidth, borderHeight
+						, xCellSz * X_CNT - 2 * borderWidth, yCellSz * Y_CNT - 2 * borderHeight
+					);
+					container.appendChild(canvas);
+					function helpShow(_e) {
+						canvas.style.display = 'block';
+						_e.preventDefault();
+						return false;						
+					}
+					function helpHide(_e) {
+						canvas.style.display = 'none';
+						_e.preventDefault();
+						return false;						
+					}
+					function helpTrigger(_e) {
+						return (canvas.style.display == 'none') ? helpShow(_e) : helpHide(_e);
+					}
+					if (!!('ontouchstart' in window)) {	//touch screen
+						/*_helpNode.addEventListener('touchstart', helpShow);		
+						_helpNode.addEventListener('touchenter', helpShow);		
+						_helpNode.addEventListener('touchend', helpHide);		
+						_helpNode.addEventListener('touchleave', helpHide);		
+						*/
+					   _helpNode.addEventListener('click', helpTrigger);		
+						
+					} else {
+						_helpNode.addEventListener('mousedown', helpShow);		
+						_helpNode.addEventListener('mouseup', helpHide);
+						_helpNode.addEventListener('mouseleave', helpHide);
+					}
+				}
+				
+				//---
+				
 				if (!!('ontouchstart' in window)) {	//touch screen
 					container.addEventListener('touchstart', touchStart);		
 					container.addEventListener('touchmove', touchMove);
@@ -422,6 +471,7 @@ var puzzle = (function(){
 					App.cover.off();
 				} 
 			}
+			, document.getElementById('puzzleHelp')
 		);
 	});
 }(jQuery));
