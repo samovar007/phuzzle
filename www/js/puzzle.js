@@ -12,6 +12,8 @@ var puzzle = (function(){
 		, containerBox
 		, callbacks	//калбаки на некоторые события
 		, timer
+		, borderHeight = 5	
+		, borderWidth = 5
 		, newFrame = (window.requestAnimationFrame
 			|| window.msRequestAnimationFrame
 			|| window.webkitRequestAnimationFrame
@@ -53,11 +55,15 @@ var puzzle = (function(){
 				if (img.width < 100 || img.height < 100) {
 					return callbacks.onError('Картинка должна быть не менее 100px по меньшей стороне');
 				}
+				var containerWidth = container.clientWidth - 2 * borderWidth
+					, containerHeight = container.clientHeight - 2 * borderHeight;
 				//Надо вычислить коеффициент, на который будем уменьшать картинку
-				var koef = Math.min(container.clientWidth/img.width, container.clientHeight/img.height);
+				var koef = Math.min(containerWidth/img.width, containerHeight/img.height);
 				//Размеры клетки на канве
 				var xImgSz = Math.floor(img.width/X_CNT)
 					, yImgSz = Math.floor(img.height/Y_CNT)
+					, xImgBorder = Math.floor(borderWidth/koef)
+					, yImgBorder = Math.floor(borderHeight/koef)
 					;
 				xCellSz = Math.floor(Math.ceil(koef * img.width)/X_CNT);
 				yCellSz = Math.floor(Math.ceil(koef * img.height)/Y_CNT);
@@ -89,13 +95,50 @@ var puzzle = (function(){
 						canvas.id = xy[0] + xy[1] * X_CNT;
 						canvas.style.left = x * xCellSz + 'px';
 						canvas.style.top = y * yCellSz + 'px'; 
-
+						
+						var sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight;
+							
+						if (0 == xy[0]) { //x
+							sX = xy[0] * xImgSz;
+							sWidth = xImgSz - xImgBorder;
+							dX = borderWidth;
+							dWidth = xCellSz - borderWidth;
+						} else {
+							sX = xy[0] * xImgSz - xImgBorder;
+							dX = 0;
+							sWidth = xImgSz;
+							dWidth = xCellSz;
+							if (X_CNT-1 == xy[0]) {
+								sWidth -= xImgBorder;
+								dWidth -= borderWidth;
+							}
+						}	
+						if (0 == xy[1]) {//y
+							sY = xy[1] * yImgSz;
+							sHeight = yImgSz - yImgBorder;
+							dY = borderHeight;
+							dHeight = yCellSz - borderHeight;
+						} else {
+							sY = xy[1] * yImgSz - yImgBorder;
+							sHeight = yImgSz;
+							dY = 0;
+							dHeight = yCellSz;
+							if (Y_CNT-1 == xy[1]) {
+								sHeight -= yImgBorder;
+								dHeight -= borderHeight;
+							}
+						}	
+							
 						resizeCanvas(canvas, xCellSz, yCellSz);
 						canvas.getContext('2d').drawImage(this
-							, xy[0] * xImgSz, xy[1] * yImgSz //смещение в исходном
-							, xImgSz, yImgSz //высота и ширина вырезаемой части
-							, 0, 0 //смещение в канве
-							, xCellSz, yCellSz //высота и ширина в канве
+							, sX //смещение в исходном
+							, sY 
+							, sWidth //высота и ширина вырезаемой части
+							, sHeight 
+							, dX //смещение в канве
+							, dY 
+							, dWidth //высота и ширина в канве
+							, dHeight 
 							);
 						container.appendChild(canvas);	
 						//ловим событие 
@@ -246,9 +289,7 @@ var puzzle = (function(){
 (function($) {
 	var  complexityAr = [[3, 3]
 			, [5, 5]
-			, [9, 9]
-			, [15, 15]
-			, [25, 25]
+			, [12, 12]
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
