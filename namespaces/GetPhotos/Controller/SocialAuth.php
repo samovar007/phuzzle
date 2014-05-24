@@ -38,12 +38,17 @@ abstract class SocialAuth extends \Common\Controller {
 	}
 	
 	protected function callbackAction() {
-		$varName = $this->getSessionVarName();
-		$token = $this->model->getToken();
-		$_SESSION[$varName]['token'] = $token;
-		$profile = $this->model->getProfile($token);
-		$_SESSION[$varName]['profile'] = $profile;
-		\Utils\redirect(HTTP_PROJECT_BEGIN . $this->name . '/');
+		try {
+			$varName = $this->getSessionVarName();
+			$token = $this->model->getToken();
+			$_SESSION[$varName]['token'] = $token;
+			$profile = $this->model->getProfile($token);
+			$_SESSION[$varName]['profile'] = $profile;
+			\Utils\redirect(HTTP_PROJECT_BEGIN . $this->name . '/');
+		} catch (\Exception $e) {
+			error_log($e);
+			\Utils\redirect('/');
+		}	
 	}
 	
 	protected function logoutAction() {
