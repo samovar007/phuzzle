@@ -65,8 +65,8 @@ var puzzle = (function(){
 					, xImgSz = Math.floor((img.width + 2*xImgBorder)/X_CNT)
 					, yImgSz = Math.floor((img.height + 2*yImgBorder)/Y_CNT)
 					;
-				xCellSz = Math.floor(Math.ceil(koef * img.width)/X_CNT);
-				yCellSz = Math.floor(Math.ceil(koef * img.height)/Y_CNT);
+				xCellSz = Math.floor(Math.ceil(koef * (img.width + 2*xImgBorder))/X_CNT);
+				yCellSz = Math.floor(Math.ceil(koef * (img.height + 2*yImgBorder))/Y_CNT);
 
 				//подготовим массив из номеров клеток 
 				var cellsAr = Array(X_CNT * Y_CNT);
