@@ -90,19 +90,24 @@ var puzzle = (function(){
 					nodes[x] = Array(Y_CNT);
 					for (var y = 0; y < Y_CNT; y ++) {
 						var xy = cellsAr[x*Y_CNT + y];
-						var canvas = document.createElement('canvas');
+						var canvas = document.createElement('canvas')
+							, ctx = canvas.getContext('2d');
 						canvas.className = 'puzzleCell';
 						canvas.id = xy[0] + xy[1] * X_CNT;
 						canvas.style.left = x * xCellSz + 'px';
 						canvas.style.top = y * yCellSz + 'px'; 
+						resizeCanvas(canvas, xCellSz, yCellSz);
 						
-						var sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight;
+						var sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight
+							, border = 0
+							, X_FIRST = 0x1, X_LAST = 0x2, Y_FIRST=0x4, Y_LAST=0x8;
 							
 						if (0 == xy[0]) { //x
 							sX = xy[0] * xImgSz;
 							sWidth = xImgSz - xImgBorder;
 							dX = borderWidth;
 							dWidth = xCellSz - borderWidth;
+							border |= X_FIRST;
 						} else {
 							sX = xy[0] * xImgSz - xImgBorder;
 							dX = 0;
@@ -111,6 +116,7 @@ var puzzle = (function(){
 							if (X_CNT-1 == xy[0]) {
 								sWidth -= xImgBorder;
 								dWidth -= borderWidth;
+								border |= X_LAST;
 							}
 						}	
 						if (0 == xy[1]) {//y
@@ -118,6 +124,7 @@ var puzzle = (function(){
 							sHeight = yImgSz - yImgBorder;
 							dY = borderHeight;
 							dHeight = yCellSz - borderHeight;
+							border |= Y_FIRST;
 						} else {
 							sY = xy[1] * yImgSz - yImgBorder;
 							sHeight = yImgSz;
@@ -126,11 +133,29 @@ var puzzle = (function(){
 							if (Y_CNT-1 == xy[1]) {
 								sHeight -= yImgBorder;
 								dHeight -= borderHeight;
+								border |= Y_LAST;
 							}
 						}	
+						//рисуем линии
+						if (border) {
+							ctx.beginPath();
+							ctx.lineWidth = 1;
+							ctx.strokeStyle = "white";
+							if (border & (X_FIRST|X_LAST)) {
+								var x4x = border & X_FIRST ? borderWidth-2 : xCellSz - borderWidth + 2; 
+								ctx.moveTo(x4x, (border & Y_FIRST ? borderHeight-2 : 0));
+								ctx.lineTo(x4x, (border & Y_LAST ? yCellSz - borderHeight + 2 : yCellSz));
+							} 
+							if (border & (Y_FIRST|Y_LAST)) {
+								var y4y = border & Y_FIRST ? borderHeight-2 : yCellSz - borderHeight + 2; 
+								ctx.moveTo((border & X_FIRST ? borderWidth-2 : 0), y4y);
+								ctx.lineTo((border & X_LAST ? xCellSz - borderWidth + 2 : xCellSz), y4y);
+							}
+							ctx.stroke();
+						}
 							
-						resizeCanvas(canvas, xCellSz, yCellSz);
-						canvas.getContext('2d').drawImage(this
+						
+						ctx.drawImage(this
 							, sX //смещение в исходном
 							, sY 
 							, sWidth //высота и ширина вырезаемой части
@@ -288,7 +313,7 @@ var puzzle = (function(){
  */
 (function($) {
 	var  complexityAr = [[3, 3]
-			, [5, 5]
+			, [6, 6]
 			, [12, 12]
 		];
 	//Если каких-то данных нет...
