@@ -206,9 +206,9 @@ var puzzle = (function(){
 					}
 					if (!!('ontouchstart' in window)) {	//touch screen
 						/*_helpNode.addEventListener('touchstart', helpShow);		
-						_helpNode.addEventListener('touchenter', helpShow);		
+						//_helpNode.addEventListener('touchenter', helpShow);		
 						_helpNode.addEventListener('touchend', helpHide);		
-						_helpNode.addEventListener('touchleave', helpHide);		
+						//_helpNode.addEventListener('touchleave', helpHide);		
 						*/
 					   _helpNode.addEventListener('click', helpTrigger);		
 						
@@ -464,6 +464,7 @@ var puzzle = (function(){
 						+ '<a target=_blank href="#" class="snicon mr" onclick="return App.popup(App.sharing.mr());"></a>'
 						+ '<a target=_blank href="#" class="snicon gg" onclick="return App.popup(App.sharing.gg());"></a>'
 						+ '<a target=_blank href="#" class="snicon fb" onclick="return App.popup(App.sharing.fb());"></a>'
+						+ '<a target=_blank href="#" class="snicon tw" onclick="return App.popup(App.sharing.tw());"></a>'
 						+ '</div>';
 					App.cover.wnd('Пазл собран!', wndBody);
 				}

@@ -95,10 +95,10 @@ var App = (function($) {
 					+ '&p[images][0]=' + encodeURIComponent(this.img);
 			}
 			, tw: function() {
-				return 'http://twitter.com/share';
-					+ '?text='      + encodeURIComponent(this.title)
+				return 'http://twitter.com/share'
+					+ '?text='      + encodeURIComponent(this.txt)
 					+ '&url='      + encodeURIComponent(this.url)
-					+ '&counturl=' + encodeURIComponent(this.url);
+					;//+ '&counturl=' + encodeURIComponent(this.url);
 			}
 			, mr: function() {
 				return 'http://connect.mail.ru/share'
@@ -114,7 +114,6 @@ var App = (function($) {
 			}
 		}
 	};
-	
 }(jQuery));
 
 $(document).ready(function() {
