@@ -107,9 +107,10 @@ a.topItem {
 }	
 .topItem.withSubmenu {
 	position: relative;
+	padding: 0;
 }
 .topItem .submenuHeader {
-	/*width: 100%;*/
+	padding: 6px 10px;
 	cursor: pointer;
 }
 .topItem.withSubmenu .submenu {

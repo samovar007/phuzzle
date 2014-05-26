@@ -17,12 +17,13 @@
 
 </head><body>
 <div id='step1' style='display: none'>
+	
 	<header class='top'>
 		<span class='asLink about topItem' onclick='App.about(); return false' title='О сайте'>
 			<i class='__icon icon-info'></i>
 		</span>		
 		<div class='topItem withSubmenu'>
-			<div class='submenuHeader __icon icon-pictures' title='Выбор источника изображений'></div>
+			<div class='submenuHeader' title='Выбор источника изображений'><i class='__icon icon-pictures'></i></div>
 			<menu class='submenu'>
 				<a href='/getPhotos/yfd'>Фото дня</a>
 				<a href='/getPhotos/ok'>Одноклассники</a>
@@ -31,6 +32,7 @@
 		</div>
 		<a class='logo30 topItem' href='/' title='Фотопазлы - главная'></a>
 	</header>
+	
 	<div class="container text-center">
 		<h1>Фотопазлы из любого изображения</h1>
 		<section class="select-block">
@@ -82,7 +84,7 @@
 			</span>		
 			<a class='topItem logo30' href='/' title='Фотопазлы - главная'></a>
 			<div class='topItem withSubmenu'>
-				<div class='submenuHeader __icon icon-pictures' title='Выбор источника изображений'></div>
+				<div class='submenuHeader' title='Выбор источника изображений'><i class='__icon icon-pictures'></i></div>
 				<menu class='submenu'>
 					<a href='/getPhotos/yfd'>Фото дня</a>
 					<a href='/getPhotos/ok'>Одноклассники</a>
@@ -90,7 +92,7 @@
 				</menu>
 			</div>
 			<div class='topItem withSubmenu'>
-				<div class='submenuHeader __icon icon-complexity' title='Сложность'></div>
+				<div class='submenuHeader' title='Сложность'><i class='__icon icon-complexity'></i></div>
 				<menu class='submenu' id='currentImgComplexity'></menu>
 			</div>
 			<span class='asLink topItem' id='puzzleHelp' title='Показать исходную'> 
@@ -98,8 +100,7 @@
 			</span>
 		</header>	
 
-		<div id='puzzle'>
-		</div>
+		<div id='puzzle'></div>
 	</div>	
 	
 	<div id='cover' style='display: none'>
