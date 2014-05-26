@@ -118,6 +118,14 @@ var App = (function($) {
 
 $(document).ready(function() {
 	App.cover.init();
+	$('.topItem.withSubmenu .submenuHeader').hover(function() {
+		$('.topItem.withSubmenu .submenu').hide();
+		$('.submenu', $(this).parent()).show();
+	});
+	$('.topItem.withSubmenu .submenu').mouseleave(function() { 
+		$(this).hide();
+	});
+	
 });
 
 

@@ -108,12 +108,13 @@ a.topItem {
 .topItem.withSubmenu {
 	position: relative;
 }
-.topItem.submenuHeader {
-	width: 100%;
+.topItem .submenuHeader {
+	/*width: 100%;*/
+	cursor: pointer;
 }
 .topItem.withSubmenu .submenu {
 	display: none;
-	left: 0;
+	right: 0;
 	min-width: 100%;
     padding-top: 39px;
     position: absolute;
@@ -246,91 +247,27 @@ a.topItem {
 
 
 .__icon {
-    background-image: url("/img/small_icons.png");
+    background-image: url("/img/icons.png");
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
     width: 16px;
 }
-.__icon.edit {
-    background-position: 0 -550px;
+.icon-pictures {
+    background-position: 0 -74px;
+    width: 25px;
 }
-.__icon.delete {
-    background-position: 0 -650px;
+.icon-help {
+    background-position: 4px -98px;
 }
-.__icon.create {
-    background-position: 0 -600px;
-}
-.__icon.info {
-    background-position: 0 -850px;
-}
-.__icon.toggle {
-    background-position: 0 -750px;
-}
-.opened .__icon.toggle {
-    background-position: 0 -800px;
-}
-.__icon.new, .icon.reopen {
-    background-position: 0 -900px;
-}
-.__icon.lay {
-    background-position: 0 -100px;
-}
-.__icon.discuss {
-    background-position: 0 -200px;
-}
-.__icon.inwork {
+.icon-complexity {
     background-position: 0 -50px;
+    width: 25px;
 }
-.__icon.appoint {
-    background-position: 0 0;
+.icon-info {
+    background-position: 5px -24px;
 }
-.__icon.check_up, .__icon.author_check {
-    background-position: 0 -150px;
-}
-.__icon.cancel {
-    background-position: 0 -250px;
-}
-.__icon.closed, .__icon.complete {
-    background-position: 0 -300px;
-}
-.__icon.ready {
-    background-position: 0 -1400px;
-}
-.__icon.express {
-    background-position: 0 -350px;
-}
-.__icon.important {
-    background-position: 0 -400px;
-}
-.__icon.current {
-    background-position: 0 -450px;
-}
-.__icon.possible {
-    background-position: 0 -500px;
-}
-.__icon.parent {
-    background-position: 0 -700px;
-}
-.__icon.closeWindow {
-    background-position: 0 -1150px;
-}
-.__icon.favorite {
-    background-position: 0 -950px;
-}
-.__icon.nfavorite {
-    background-position: 0 -1000px;
-}
-.__icon.subscribed {
-    background-position: 0 -1050px;
-}
-.__icon.nsubscribed {
-    background-position: 0 -1100px;
-}
-.__icon.info.autofill {
-    margin-left: 0.5em;
-    vertical-align: top;
-}
+
 
 .snicon {
     background: url("/img/socials_big.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);

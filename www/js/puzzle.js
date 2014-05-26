@@ -210,7 +210,8 @@ var puzzle = (function(){
 						_helpNode.addEventListener('touchend', helpHide);		
 						//_helpNode.addEventListener('touchleave', helpHide);		
 						*/
-					   _helpNode.addEventListener('click', helpTrigger);		
+					   _helpNode.addEventListener('click', helpTrigger);	
+					   canvas.addEventListener('click', helpHide);
 						
 					} else {
 						_helpNode.addEventListener('mousedown', helpShow);		
@@ -396,15 +397,6 @@ var puzzle = (function(){
 			}	
 		});
 		$('#currentImgComplexity').html(options);
-	
-		//$item = $('#currentImgComplexity').parent();
-		$('.topItem.withSubmenu .submenuHeader').hover(function() {
-			$('.topItem.withSubmenu .submenu').hide();
-			$('.submenu', $(this).parent()).show();
-		});
-		$('.topItem.withSubmenu .submenu').mouseleave(function() { 
-			$(this).hide();
-		});
 	}
 	
     function wordEnding(_digit, _ending) {

@@ -19,11 +19,18 @@
 
 </head><body>
 	<header class='top'>
-		<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span>
-		<a class='topItem' href='/getPhotos/yfd'>Фото дня</a>
-		<a class='topItem snicon ok' href='/getPhotos/ok'></a>
-		<a class='topItem snicon vk' href='/getPhotos/vk'></a>
-		<a class='logo30 topItem' href='/' title='Фотопазлы'></a></li>
+			<span class='asLink about topItem' onclick='App.about(); return false' title='О сайте'>
+				<i class='__icon icon-info'></i>
+			</span>		
+			<div class='topItem withSubmenu'>
+				<div class='submenuHeader __icon icon-pictures' title='Выбор источника изображений'></div>
+				<menu class='submenu'>
+					<a href='/getPhotos/yfd'>Фото дня</a>
+					<a href='/getPhotos/ok'>Одноклассники</a>
+					<a href='/getPhotos/vk'>Вконтакте</a>
+				</menu>
+			</div>
+		<a class='logo30 topItem' href='/' title='Фотопазлы'></a>
 	</header>	
 	<h1>Фотопазлы - выбор фотографии</h1>
 	<div id="photos"></div>

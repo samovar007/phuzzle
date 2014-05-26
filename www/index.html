@@ -18,11 +18,18 @@
 </head><body>
 <div id='step1' style='display: none'>
 	<header class='top'>
-		<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span>
-		<a class='topItem' href='/getPhotos/yfd'>Фото дня</a>
-		<a class='topItem snicon ok' href='/getPhotos/ok'></a>
-		<a class='topItem snicon vk' href='/getPhotos/vk'></a>
-		<a class='logo30 topItem' href='/' title='Фотопазлы'></a>
+		<span class='asLink about topItem' onclick='App.about(); return false' title='О сайте'>
+			<i class='__icon icon-info'></i>
+		</span>		
+		<div class='topItem withSubmenu'>
+			<div class='submenuHeader __icon icon-pictures' title='Выбор источника изображений'></div>
+			<menu class='submenu'>
+				<a href='/getPhotos/yfd'>Фото дня</a>
+				<a href='/getPhotos/ok'>Одноклассники</a>
+				<a href='/getPhotos/vk'>Вконтакте</a>
+			</menu>
+		</div>
+		<a class='logo30 topItem' href='/' title='Фотопазлы - главная'></a>
 	</header>
 	<div class="container text-center">
 		<h1>Фотопазлы из любого изображения</h1>
@@ -70,13 +77,25 @@
 	
 	<div id='step2'  style='display: none'> 
 		<header class='top'>
-			<span class='asLink about topItem' onclick='App.about(); return false'>О сайте</span>		
-			<a class='topItem logo30' href='/' title='Фотопазлы'></a>
-			<a class='topItem' href="/">Изменить <span class="xs-hidden">картинку</span></a> 
-			<div class='topItem withSubmenu'><div class='submenuHeader'>Сложность ▼</div>
+			<span class='asLink about topItem' onclick='App.about(); return false' title='О сайте'>
+				<i class='__icon icon-info'></i>
+			</span>		
+			<a class='topItem logo30' href='/' title='Фотопазлы - главная'></a>
+			<div class='topItem withSubmenu'>
+				<div class='submenuHeader __icon icon-pictures' title='Выбор источника изображений'></div>
+				<menu class='submenu'>
+					<a href='/getPhotos/yfd'>Фото дня</a>
+					<a href='/getPhotos/ok'>Одноклассники</a>
+					<a href='/getPhotos/vk'>Вконтакте</a>
+				</menu>
+			</div>
+			<div class='topItem withSubmenu'>
+				<div class='submenuHeader __icon icon-complexity' title='Сложность'></div>
 				<menu class='submenu' id='currentImgComplexity'></menu>
 			</div>
-			<!-- span class='asLink topItem' id='puzzleHelp'>?</span -->
+			<span class='asLink topItem' id='puzzleHelp' title='Показать исходную'> 
+				<i class="__icon icon-help" ></i>
+			</span>
 		</header>	
 
 		<div id='puzzle'>
