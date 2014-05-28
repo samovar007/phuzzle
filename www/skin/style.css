@@ -216,6 +216,7 @@ a.topItem {
 	/* text-align: center; */
 	padding-bottom: 1.5em;
 	padding-left: 15px;
+	padding-right: 15px;
 }
 #coverWnd i.closeWindow{
 	position: absolute;
@@ -371,6 +372,12 @@ h2{
 	border: none;
 	padding: 5px 10px;
 }
+
+#coverWndInside .url-input {
+	border-width: 1px;
+	border-color: silver;
+	border-style: solid;
+}
 .btn{
 	background: #50c9a1;
 	border: none;
@@ -379,8 +386,12 @@ h2{
 	width: 25%;
 	cursor: pointer;
 }
+#coverWndInside .btn {
+	background: #7a7a7a;
+}
 .btn:active{
 	background: #1ca58a;
+	background: linear-gradient(to bottom, #A9A9A9, #7A7A7A);
 }
 .img-responsive, #yfdExamplePlace img {
   display: block;

@@ -24,6 +24,14 @@ var App = (function($) {
 			this.cover.wnd('О проекте'
 				, 'Автор: Василий Самойлов. <br>Помощь в дизайне и верстке: Екатерина Киреева.<br><br>По всем вопросам обращайтесь по адресу devphuzzle' + '@' + 'gmail.com');
 		}
+		, directUrl: function() {
+			this.cover.wnd('Адрес картинки'
+				, '<form action="/" method="GET">'
+					+ '<input class="url-input" size="50" value="" name="img" placeholder="Пример: http://phuzzle.myarea.ru/example.jpg">'
+					+ '<input class="btn" type="submit" value="Создать">'
+					+'</form>'
+			);
+		}
 		, popup: function(_url) {
 			window.open(_url, '', 'toolbar=0,status=0,width=626,height=436');
 			return false;
