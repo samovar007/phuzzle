@@ -27,7 +27,7 @@ var photos = (function(){
 		}
 		, showAlbumList: function(_data) {
 			if (!_data.response) {
-				throw Error('Данные об альбомах не пришли');
+				throw new Error('Данные об альбомах не пришли');
 			}
 			var $container = $('#photos');
 			var $albumsCnt = 0;	
@@ -62,7 +62,7 @@ var photos = (function(){
 		}
 		, showAlbum: function(_data) {
 			if (!_data.response) {
-				throw Error('Данные о фотографиях альбома не пришли');
+				throw new Error('Данные о фотографиях альбома не пришли');
 			}
 			if (!_data.response[0]) {
 				return;	//пустой результат

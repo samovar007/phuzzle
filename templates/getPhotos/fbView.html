@@ -1,0 +1,6 @@
+<div id='needAuth' style='display: none;'>	
+	Нажмите на кнопку для загрузки фото
+	<fb:login-button scope="public_profile,user_photos" onlogin="fbPhotos.checkLoginState();"></fb:login-button>	
+</div>	
+<div id='photos'></div>
+<script src='/js/fb.js'></script>
