@@ -28,7 +28,7 @@ var App = (function($) {
 			this.cover.wnd('Адрес картинки'
 				, '<form action="/" method="GET">'
 					+ '<input class="url-input" size="50" value="" name="img" placeholder="Пример: http://phuzzle.myarea.ru/example.jpg">'
-					+ '<input class="btn" type="submit" value="Создать">'
+					+ '<input class="btn" type="submit" value="Готово">'
 					+'</form>'
 			);
 		}

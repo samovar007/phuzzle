@@ -36,11 +36,15 @@ var fbPhotos = (function($){
 	// successful.  See statusChangeCallback() for when this call is made.
 	function testAPI() {
 		$('#needAuth').hide();
+		var $container = $('#photos').html('<div id="album0" class="albumData"></div><h2>Альбомы</h2>');
+		FB.api('/me/photos', function(_data){
+			fillAlbumPhotos(0, _data);
+		});
+		
 		FB.api('/me/albums', function(_data){
 			if (!_data || _data.error) {
 				throw new Error('Ошибка при получении альбомов ' + _data.error);
 			}
-			var $container = $('#photos');
 			var $albumsCnt = 0;	
 			_data.data.forEach(function(_el){
 				if (0 == _el.size) {
@@ -56,43 +60,32 @@ var fbPhotos = (function($){
 				$('<div id="album' + _el.id + '" class="albumData displayNone"></div>').appendTo($container);	
 			});
 			if (!$albumsCnt) {
-				$container.html('Альбомов с фотографиями не найдено');
+				$container.append('<p>Альбомов с фотографиями не найдено</p>');
 			}
-			console.log(_data);
 		});
+	};
+	
+	function fillAlbumPhotos(_aid, _data) {
+		if (!_data || _data.error || !_data.data) {
+			throw new Error('Ошибка при получении фотографий ' + _data.error);
+		}
+		gotAlbumsData[_aid] = 1;
+		var $album = $('#album' + _aid);
+//console.log(_data);
+		_data.data.forEach(function(_el){
+			$(makeLinkToPhuzzle(_el.source, 1, '<img src="' + _el.picture + '">'))
+				.appendTo($album);
+		});
+		$album.removeClass('displayNone');
 	}
 
 	function getAlbumPhotos(_aid) {
 		FB.api('/' + _aid + '/photos', 
 			function (_data) {
-				if (!_data || _data.error || !_data.data) {
-					throw new Error('Ошибка при получении фотографий ' + _data.error);
-				}
-				gotAlbumsData[_aid] = 1;
-				var $album = $('#album' + _aid);
-//console.log(_data);
-				_data.data.forEach(function(_el){
-					$(makeLinkToPhuzzle(_el.source, 1, '<img src="' + _el.picture + '">'))
-						.appendTo($album);
-				});
-				$album.removeClass('displayNone');
+				fillAlbumPhotos(_aid, _data);
 			}
 		);
-/*		
-		$.getJSON('/getPhotos/ok/json/photos', params, function(_data){
-			if (!_data || !_data.photos) {
-				return;
-			}
-			gotAlbumsData[_aid] = 1;
-			var $album = $('#album' + _aid);
-			_data.photos.forEach(function(_el){
-				$(makeLinkToPhuzzle(_el.pic640x480, 1, '<img src="' + _el.pic128x128 + '">'))
-					.appendTo($album);
-			});
-			$album.removeClass('displayNone');
-		});
-*/		
-	}
+	};
 	
   
 	return {
