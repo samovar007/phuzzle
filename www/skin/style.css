@@ -5,6 +5,7 @@
     Description:
         Purpose of the stylesheet follows.
 */
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -17,6 +18,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 html {
   font-size: 62.5%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -302,6 +304,15 @@ a.topItem {
 	margin-right: 9px;
     margin-top: 5px;
 }	
+
+.twelvecell {
+	position: absolute;
+	text-align: center;
+/*	border-width: 1px;
+	border-style: solid;
+	border-color: silver gray gray silver; */
+	cursor: pointer;
+}
 
 
 /*-----------------------*/

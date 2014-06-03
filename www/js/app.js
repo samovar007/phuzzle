@@ -1,5 +1,6 @@
 /*
- * Проверка браузера
+ * Различные утилиты для фазлов
+ * @author: Samoylov Vasily
  */
 (function(){
 	var node = document.createElement('canvas');
@@ -120,6 +121,160 @@ var App = (function($) {
 					+ '?url='          + encodeURIComponent(this.url)
 					;	
 			}
+		}
+		, newFrame: (window.requestAnimationFrame
+			|| window.msRequestAnimationFrame
+			|| window.webkitRequestAnimationFrame
+			|| window.mozRequestAnimationFrame
+			|| window.oRequestAnimationFrame
+			|| function(_callback)	{_callback();}).bind(window)
+		, resizeCanvas: function (_elem, _x, _y) {
+			_elem.width = _x;
+			_elem.style.width = _x + 'px';
+			_elem.height = _y;
+			_elem.style.height = _y + 'px';
+		}
+		, createCanvasAr: function(_containerNode, _img, _params, _cb) {
+			['borderWidth', 'borderHeight', 'cols', 'rows'].forEach(function(_e){
+				if (!_params[_e]) {
+					throw new Error('Отсутствует обязательный параметр ' + _e + ' при вызове App.createCanvasAr');
+				}
+			});
+			if (_img.width < 100 || _img.height < 100) {
+				return _cb.onError('Картинка должна быть не менее 100px по меньшей стороне');
+			}
+			var X_CNT = _params.cols, Y_CNT = _params.rows;
+			var containerWidth = _containerNode.clientWidth - 2 * _params.borderWidth
+				, containerHeight = _containerNode.clientHeight - 2 * _params.borderHeight;
+			//Надо вычислить коеффициент, на который будем уменьшать картинку
+			var koef = Math.min(containerWidth/_img.width, containerHeight/_img.height);
+			//Размеры клетки на канве
+			var xImgBorder = Math.floor(_params.borderWidth/koef)
+				, yImgBorder = Math.floor(_params.borderHeight/koef)
+				, xImgSz = Math.floor((_img.width + 2*xImgBorder)/X_CNT)
+				, yImgSz = Math.floor((_img.height + 2*yImgBorder)/Y_CNT)
+				;
+			var xCellSz = Math.floor(Math.ceil(koef * (_img.width + 2*xImgBorder))/X_CNT);
+			var yCellSz = Math.floor(Math.ceil(koef * (_img.height + 2*yImgBorder))/Y_CNT);
+				//В процессе получится, что мы немного обрежим исходную картинку, чтоб получилось целое количество клеток
+					//кладем в массив канв функцию создания
+			var canvasFactory = function(x, y, _canvas) {
+				var sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight
+					, border = 0
+					, X_FIRST = 0x1, X_LAST = 0x2, Y_FIRST=0x4, Y_LAST=0x8;
+
+				if (0 == x) { //x
+					sX = 0;
+					sWidth = xImgSz - xImgBorder;
+					dX = _params.borderWidth;
+					dWidth = xCellSz - _params.borderWidth;
+					border |= X_FIRST;
+				} else {
+					sX = x * xImgSz - xImgBorder;
+					dX = 0;
+					sWidth = xImgSz;
+					dWidth = xCellSz;
+					if (X_CNT-1 == x) {
+						sWidth -= xImgBorder;
+						dWidth -= _params.borderWidth;
+						border |= X_LAST;
+					}
+				}	
+				if (0 == y) {//y
+					sY = 0;
+					sHeight = yImgSz - yImgBorder;
+					dY = _params.borderHeight;
+					dHeight = yCellSz - _params.borderHeight;
+					border |= Y_FIRST;
+				} else {
+					sY = y * yImgSz - yImgBorder;
+					sHeight = yImgSz;
+					dY = 0;
+					dHeight = yCellSz;
+					if (Y_CNT-1 == y) {
+						sHeight -= yImgBorder;
+						dHeight -= _params.borderHeight;
+						border |= Y_LAST;
+					}
+				}	
+
+				var canvas =  _canvas || document.createElement('canvas')
+					, ctx = canvas.getContext('2d');
+				App.resizeCanvas(canvas, xCellSz, yCellSz);
+
+				//рисуем линии
+				if (border) {
+					ctx.beginPath();
+					ctx.lineWidth = 1;
+					ctx.strokeStyle = "white";
+					if (border & (X_FIRST|X_LAST)) {
+						var x4x = border & X_FIRST ? _params.borderWidth-2 : xCellSz - _params.borderWidth + 2; 
+						ctx.moveTo(x4x, (border & Y_FIRST ? _params.borderHeight-2 : 0));
+						ctx.lineTo(x4x, (border & Y_LAST ? yCellSz - _params.borderHeight + 2 : yCellSz));
+					} 
+					if (border & (Y_FIRST|Y_LAST)) {
+						var y4y = border & Y_FIRST ? _params.borderHeight-2 : yCellSz - _params.borderHeight + 2; 
+						ctx.moveTo((border & X_FIRST ? _params.borderWidth-2 : 0), y4y);
+						ctx.lineTo((border & X_LAST ? xCellSz - _params.borderWidth + 2 : xCellSz), y4y);
+					}
+					ctx.stroke();
+				}
+
+
+				ctx.drawImage(_img
+					, sX //смещение в исходном
+					, sY 
+					, sWidth //высота и ширина вырезаемой части
+					, sHeight 
+					, dX //смещение в канве
+					, dY 
+					, dWidth //высота и ширина в канве
+					, dHeight 
+					);
+				return canvas;		
+			}
+			//Канва-подсказка
+			var canvas = document.createElement('canvas')
+				, ctx = canvas.getContext('2d');
+			canvas.style.position = 'absolute';
+			canvas.style.left = 0;
+			canvas.style.top = 0; 
+			canvas.style.display= 'none';
+			this.resizeCanvas(canvas, xCellSz * X_CNT, yCellSz * Y_CNT);
+			ctx.fillStyle = 'black';
+			ctx.fillRect(0, 0, xCellSz * X_CNT, yCellSz * Y_CNT);
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = 'white';
+			ctx.strokeRect(_params.borderWidth-2
+				, _params.borderHeight-2
+				, xCellSz * X_CNT - 2 * (_params.borderWidth - 2)
+				, yCellSz * Y_CNT - 2 * (_params.borderHeight-2)
+				);
+			ctx.drawImage(_img
+				, 0, 0 
+				, xImgSz * X_CNT - 2 * xImgBorder , yImgSz * Y_CNT - 2 * yImgBorder
+				, _params.borderWidth, _params.borderHeight
+				, xCellSz * X_CNT - 2 * _params.borderWidth, yCellSz * Y_CNT - 2 * _params.borderHeight
+			);
+			
+			return {
+				canvasFactory: canvasFactory
+				, help: canvas
+				, cellWidth: xCellSz
+				, cellHeight: yCellSz
+			};
+		}
+		, wordEnding: function (_digit, _ending) {
+			if (0 == _digit) {
+				return _ending.many;
+			} else if (1 == _digit) {
+				return _ending.one;
+			} else if (5 > _digit) {
+				return _ending.some;
+			} else if (20 < _digit) {
+				return App.wordEnding(_digit % 10, _ending);
+			}
+			return _ending.many;
 		}
 	};
 }(jQuery));
