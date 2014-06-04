@@ -15,6 +15,8 @@ var twelve = (function($){
 		, helpNode
 		, img
 		, canvasAr
+		, timer
+		, helpCanvas
 		;
 	
 	var game = {
@@ -339,6 +341,35 @@ var twelve = (function($){
 		game.init(columns, rows);
 		game.jumble(10);
 
+		//Формируем канву-подсказку
+		if (helpNode) {
+			helpCanvas = document.createElement('canvas');
+			containerNode.appendChild(helpCanvas);
+			function helpShow(_e) {
+				helpCanvas.style.display = 'block';
+				_e.preventDefault();
+				return false;						
+			}
+			function helpHide(_e) {
+				helpCanvas.style.display = 'none';
+				_e.preventDefault();
+				return false;						
+			}
+			function helpTrigger(_e) {
+				return (helpCanvas.style.display == 'none') ? helpShow(_e) : helpHide(_e);
+			}
+			if (!!('ontouchstart' in window)) {	//touch screen
+			   helpNode.addEventListener('click', helpTrigger);	
+			   helpCanvas.addEventListener('click', helpHide);
+
+			} else {
+				helpNode.addEventListener('mousedown', helpShow);		
+				helpNode.addEventListener('mouseup', helpHide);
+				helpNode.addEventListener('mouseleave', helpHide);
+			}
+		}
+
+		timer = Date.now();
 		reshow();
 	}
 	
@@ -377,32 +408,9 @@ var twelve = (function($){
 		}
 
 		//Формируем канву-подсказку
-		if (helpNode) {
-			containerNode.appendChild(canvasAr.help);
-			function helpShow(_e) {
-				canvasAr.help.style.display = 'block';
-				_e.preventDefault();
-				return false;						
-			}
-			function helpHide(_e) {
-				canvasAr.help.style.display = 'none';
-				_e.preventDefault();
-				return false;						
-			}
-			function helpTrigger(_e) {
-				return (canvasAr.help.style.display == 'none') ? helpShow(_e) : helpHide(_e);
-			}
-			if (!!('ontouchstart' in window)) {	//touch screen
-			   helpNode.addEventListener('click', helpTrigger);	
-			   canvasAr.help.addEventListener('click', helpHide);
-
-			} else {
-				helpNode.addEventListener('mousedown', helpShow);		
-				helpNode.addEventListener('mouseup', helpHide);
-				helpNode.addEventListener('mouseleave', helpHide);
-			}
+		if (helpCanvas) {
+			canvasAr.redrawHelpCanvas(helpCanvas);
 		}
-		
 	}
 	function getCanvasByNumber(_num, _canvas) {
 		return canvasAr.canvasFactory(parseInt(_num / rows), _num % rows, _canvas);
@@ -414,7 +422,7 @@ var twelve = (function($){
 	}
 	
 	function createCell(_x, _y, _nodeN) {
-		return $(getCanvasByNumber(_nodeN))
+		return $(getCanvasByNumber(_nodeN, document.createElement('canvas')))
 			.addClass('twelvecell')
 			.css({top: _y * cellHeight + 'px'
 				, left: _x * cellWidth + 'px'
@@ -430,7 +438,7 @@ var twelve = (function($){
 			return;
 		}
 		clearEventListener();
-		App.newFrame(externalCb.win);
+		App.newFrame(function() {externalCb.win(Date.now() - timer);});
 	}
 	function setEventListener() {
 		if (!!('ontouchstart' in window)) {	//touch screen

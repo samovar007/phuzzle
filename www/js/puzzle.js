@@ -37,11 +37,80 @@ var puzzle = (function(){
 			}
 			container = _container;
 			containerBox = container.getBoundingClientRect();
-			var img = new Image();
-			img.addEventListener('load', function () {
+			
+			//Создаем массив из канв
+			nodes =	Array(X_CNT);
+			for (var x = 0; x < X_CNT; x ++) {
+				nodes[x] = Array(Y_CNT);
+				for (var y = 0; y < Y_CNT; y ++) {
+					var canvas = document.createElement('canvas');
+					canvas.className = 'puzzleCell';
+					canvas.id = x + y * X_CNT;
+					nodes[x][y] = canvas;
+					container.appendChild(canvas);
+				}
+			}	
+			//Перемешиваем
+			var rndX, rndY, tmp;
+			for (var x = 0; x < X_CNT; x ++) {
+				for (var y = 0; y < Y_CNT; y ++) {
+					rndX = Math.floor(Math.random() * X_CNT);
+					rndY = Math.floor(Math.random() * Y_CNT);
+					tmp = nodes[rndX][rndY];
+					nodes[rndX][rndY] = nodes[x][y];
+					nodes[x][y] = tmp;
+				}
+			}	
+			//Сразу установим обработчики
+			if (!!('ontouchstart' in window)) {	//touch screen
+				container.addEventListener('touchstart', touchStart);		
+				container.addEventListener('touchmove', touchMove);
+				container.addEventListener('touchend', unhold);		
+				$(window).on('orientationchange', function() {
+					//Без таймаута на моем планшете работает не верно
+					setTimeout(reshow, 200);
+				});
 				
-				var canvasAr = App.createCanvasAr(container
-						, this
+			} else {	
+				container.addEventListener('mousemove', mousemove);
+				container.addEventListener('mouseup', unhold);
+				container.addEventListener('mouseleave', unhold);
+				container.addEventListener('mousedown', hold);		
+			}	
+			//Формируем канву-подсказку
+			var helpCanvas;
+			if (_helpNode) {
+				helpCanvas = document.createElement('canvas');
+				container.appendChild(helpCanvas);
+				function helpShow(_e) {
+					helpCanvas.style.display = 'block';
+					_e.preventDefault();
+					return false;						
+				}
+				function helpHide(_e) {
+					helpCanvas.style.display = 'none';
+					_e.preventDefault();
+					return false;						
+				}
+				function helpTrigger(_e) {
+					return (helpCanvas.style.display == 'none') ? helpShow(_e) : helpHide(_e);
+				}
+				if (!!('ontouchstart' in window)) {	//touch screen
+				   _helpNode.addEventListener('click', helpTrigger);	
+				   helpCanvas.addEventListener('click', helpHide);
+
+				} else {
+					_helpNode.addEventListener('mousedown', helpShow);		
+					_helpNode.addEventListener('mouseup', helpHide);
+					_helpNode.addEventListener('mouseleave', helpHide);
+				}
+			}
+			
+			var img = new Image();
+			function reshow() {
+				var canvasAr = App.createCanvasAr(
+						container
+						, img
 						, {borderWidth: borderWidth
 							, borderHeight: borderHeight
 							, cols: X_CNT
@@ -53,83 +122,38 @@ var puzzle = (function(){
 				xCellSz = canvasAr.cellWidth;
 				yCellSz = canvasAr.cellHeight;
 				
-				//подготовим массив из номеров клеток 
-				var cellsAr = Array(X_CNT * Y_CNT);
-				for (var x = 0; x < X_CNT; x ++) {
-					for (var y = 0; y < Y_CNT; y ++) {
-						cellsAr[x*Y_CNT + y] = [x, y];
-					}
-				}	
-				//перемешаем массив из номеров клеток
-				var rndIdx, tmp, maxIdx = cellsAr.length-1;
-				for (var i=0; i < cellsAr.length; i++) {
-					rndIdx = Math.floor(Math.random() * maxIdx);
-					tmp = cellsAr[rndIdx];
-					cellsAr[rndIdx] = cellsAr[i];
-					cellsAr[i] = tmp;
-				}
-				nodes =	Array(X_CNT);
 				//Поставим канвы на места
 				for (var x = 0; x < X_CNT; x ++) {
-					nodes[x] = Array(Y_CNT);
 					for (var y = 0; y < Y_CNT; y ++) {
-						var xy = cellsAr[x*Y_CNT + y]
-							, canvas = canvasAr.canvasFactory(xy[0], xy[1]);
-						canvas.className = 'puzzleCell';
-						canvas.id = xy[0] + xy[1] * X_CNT;
+						var canvas = nodes[x][y]
+							, id=nodes[x][y].id
+							, rx = id % X_CNT
+							, ry = Math.floor(id/X_CNT)
+							;
+						canvas = canvasAr.canvasFactory(rx, ry, canvas); 
 						canvas.style.left = x * xCellSz + 'px';
 						canvas.style.top = y * yCellSz + 'px'; 
-						container.appendChild(canvas);
-						nodes[x][y] = canvas;
 					}
 				}	
 				//Формируем канву-подсказку
-				if (_helpNode) {
-					container.appendChild(canvasAr.help);
-					function helpShow(_e) {
-						canvasAr.help.style.display = 'block';
-						_e.preventDefault();
-						return false;						
-					}
-					function helpHide(_e) {
-						canvasAr.help.style.display = 'none';
-						_e.preventDefault();
-						return false;						
-					}
-					function helpTrigger(_e) {
-						return (canvasAr.help.style.display == 'none') ? helpShow(_e) : helpHide(_e);
-					}
-					if (!!('ontouchstart' in window)) {	//touch screen
-					   _helpNode.addEventListener('click', helpTrigger);	
-					   canvasAr.help.addEventListener('click', helpHide);
-						
-					} else {
-						_helpNode.addEventListener('mousedown', helpShow);		
-						_helpNode.addEventListener('mouseup', helpHide);
-						_helpNode.addEventListener('mouseleave', helpHide);
-					}
+				if (helpCanvas) {
+					canvasAr.redrawHelpCanvas(helpCanvas);
 				}
+			}
+			
+			img.addEventListener('load', function () {
 				
-				//---
-				
-				if (!!('ontouchstart' in window)) {	//touch screen
-					container.addEventListener('touchstart', touchStart);		
-					container.addEventListener('touchmove', touchMove);
-					container.addEventListener('touchend', unhold);		
-					
-				} else {	
-					container.addEventListener('mousemove', mousemove);
-					container.addEventListener('mouseup', unhold);
-					container.addEventListener('mouseleave', unhold);
-					container.addEventListener('mousedown', hold);		
-				}	
+				reshow();
+				timer = Date.now();
 				if (callbacks.successLoad) {
-					timer = Date.now();
-					callbacks.successLoad({sz: [xCellSz * X_CNT, yCellSz * Y_CNT]});
+					callbacks.successLoad();
 				}
 			});	
 			img.src = _imgSrc;
 
+			
+		}
+		, reshow: function() {
 			
 		}
 		, hold: function(_x, _y, _node) {

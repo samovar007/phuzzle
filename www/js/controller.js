@@ -6,8 +6,7 @@
 	var  complexityAr = [{complexity: [3, 3], describe: 'Легкая', game: 'puzzle'}
 			, {complexity: [6, 6], describe: 'Средняя', game: 'puzzle'}
 			, {complexity: [12, 12], describe: 'Сложная', game: 'puzzle'}
-			, {complexity: [2, 3], describe: '12 простые', game: 'twelve'}
-			, {complexity: [3, 4], describe: 'Двянашки', game: 'twelve'}
+			, {complexity: [3, 4], describe: 'Фрубик', game: 'twelve'}
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
@@ -89,7 +88,7 @@
 					+ '</div>';
 				App.cover.wnd('Пазл собран!', wndBody);
 			}
-			, successLoad: function(_cells) {
+			, successLoad: function() {
 				App.cover.off();
 			} 
 		};

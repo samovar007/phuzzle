@@ -133,6 +133,7 @@ var App = (function($) {
 			_elem.style.width = _x + 'px';
 			_elem.height = _y;
 			_elem.style.height = _y + 'px';
+			return _elem;
 		}
 		, createCanvasAr: function(_containerNode, _img, _params, _cb) {
 			['borderWidth', 'borderHeight', 'cols', 'rows'].forEach(function(_e){
@@ -198,9 +199,9 @@ var App = (function($) {
 					}
 				}	
 
-				var canvas =  _canvas || document.createElement('canvas')
-					, ctx = canvas.getContext('2d');
-				App.resizeCanvas(canvas, xCellSz, yCellSz);
+				var canvas =  _canvas
+					, ctx = _canvas.getContext('2d');
+				App.resizeCanvas(_canvas, xCellSz, yCellSz);
 
 				//рисуем линии
 				if (border) {
@@ -231,35 +232,36 @@ var App = (function($) {
 					, dWidth //высота и ширина в канве
 					, dHeight 
 					);
-				return canvas;		
+				return _canvas;		
 			}
 			//Канва-подсказка
-			var canvas = document.createElement('canvas')
-				, ctx = canvas.getContext('2d');
-			canvas.style.position = 'absolute';
-			canvas.style.left = 0;
-			canvas.style.top = 0; 
-			canvas.style.display= 'none';
-			this.resizeCanvas(canvas, xCellSz * X_CNT, yCellSz * Y_CNT);
-			ctx.fillStyle = 'black';
-			ctx.fillRect(0, 0, xCellSz * X_CNT, yCellSz * Y_CNT);
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = 'white';
-			ctx.strokeRect(_params.borderWidth-2
-				, _params.borderHeight-2
-				, xCellSz * X_CNT - 2 * (_params.borderWidth - 2)
-				, yCellSz * Y_CNT - 2 * (_params.borderHeight-2)
+			function redrawHelpCanvas(_canvas) {
+				var ctx = _canvas.getContext('2d');
+				_canvas.style.position = 'absolute';
+				_canvas.style.left = 0;
+				_canvas.style.top = 0; 
+				_canvas.style.display= 'none';
+				App.resizeCanvas(_canvas, xCellSz * X_CNT, yCellSz * Y_CNT);
+				ctx.fillStyle = 'black';
+				ctx.fillRect(0, 0, xCellSz * X_CNT, yCellSz * Y_CNT);
+				ctx.lineWidth = 1;
+				ctx.strokeStyle = 'white';
+				ctx.strokeRect(_params.borderWidth-2
+					, _params.borderHeight-2
+					, xCellSz * X_CNT - 2 * (_params.borderWidth - 2)
+					, yCellSz * Y_CNT - 2 * (_params.borderHeight-2)
+					);
+				ctx.drawImage(_img
+					, 0, 0 
+					, xImgSz * X_CNT - 2 * xImgBorder , yImgSz * Y_CNT - 2 * yImgBorder
+					, _params.borderWidth, _params.borderHeight
+					, xCellSz * X_CNT - 2 * _params.borderWidth, yCellSz * Y_CNT - 2 * _params.borderHeight
 				);
-			ctx.drawImage(_img
-				, 0, 0 
-				, xImgSz * X_CNT - 2 * xImgBorder , yImgSz * Y_CNT - 2 * yImgBorder
-				, _params.borderWidth, _params.borderHeight
-				, xCellSz * X_CNT - 2 * _params.borderWidth, yCellSz * Y_CNT - 2 * _params.borderHeight
-			);
-			
+				return _canvas
+			}
 			return {
 				canvasFactory: canvasFactory
-				, help: canvas
+				, redrawHelpCanvas: redrawHelpCanvas
 				, cellWidth: xCellSz
 				, cellHeight: yCellSz
 			};
