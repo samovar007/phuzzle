@@ -159,6 +159,7 @@ a.topItem {
  
 .puzzleCell {
 	position: absolute;
+	cursor: pointer;
 }
 #puzzle {
 	position: absolute;

@@ -15,7 +15,50 @@ var puzzle = (function(){
 		, timer
 		, borderHeight = 6	
 		, borderWidth = 6
+		, animationStepX
+		, animationStepY
 		;
+		
+	var animation = {
+		node: null
+		, dx: 0
+		, dy: 0
+		, timer: 0
+		, onMoved: null
+		, move: function(_dx, _dy) {
+			this.node.style.left = parseInt(this.node.style.left) + _dx + 'px';
+			this.node.style.top = parseInt(this.node.style.top) + _dy + 'px';
+		}
+		, clear: function() {
+			if (this.node) {
+				clearTimeout(this.timer);
+				this.timer = 0;
+				this.move(this.dx, this.dy);
+				this.onMoved(this.node);
+			}
+			this.node = null;
+			this.dx = this.dy = 0;
+		}
+		, init: function(_dx, _dy, _node, _onMoved) {
+			this.dx = _dx;
+			this.dy = _dy;
+			this.node = _node;
+			this.onMoved = _onMoved;
+			this.step();
+		}
+		, step: function() {
+			if (Math.abs(this.dx) < animationStepX && Math.abs(this.dy) < animationStepY) {
+				return this.clear();
+			}	
+			var dx = this.dx > 0 ? Math.min(this.dx, animationStepX) : Math.max(this.dx, -animationStepX)
+				, dy = this.dy > 0 ? Math.min(this.dy, animationStepY) : Math.max(this.dy, -animationStepY)
+				;
+			this.move(dx, dy);	
+			this.dx -= dx;
+			this.dy -= dy;
+			setTimeout(this.step.bind(this), 25);
+		}
+	};
 
 	var puzzle = {
 		 x: 0
@@ -32,7 +75,6 @@ var puzzle = (function(){
 			if (!callbacks.onError) {
 				callbacks.onError = function onError(_str) {
 					throw new Exception(_str);
-					alert(_str)
 				}
 			}
 			container = _container;
@@ -121,6 +163,8 @@ var puzzle = (function(){
 					;
 				xCellSz = canvasAr.cellWidth;
 				yCellSz = canvasAr.cellHeight;
+				animationStepX = Math.ceil(xCellSz/10);
+				animationStepY = Math.ceil(yCellSz/10);
 				
 				//Поставим канвы на места
 				for (var x = 0; x < X_CNT; x ++) {
@@ -139,7 +183,8 @@ var puzzle = (function(){
 				if (helpCanvas) {
 					canvasAr.redrawHelpCanvas(helpCanvas);
 				}
-			}
+				
+			} // reshow
 			
 			img.addEventListener('load', function () {
 				
@@ -153,13 +198,11 @@ var puzzle = (function(){
 
 			
 		}
-		, reshow: function() {
-			
-		}
 		, hold: function(_x, _y, _node) {
 			if (!this.isFree()) {
 				return;
 			}
+			animation.clear();
 			this.x = _x;
 			this.y = _y; 
 			this.node = _node;
@@ -176,26 +219,39 @@ var puzzle = (function(){
 			//Определяем, над какой клеткой опустили мышь
 			var changedCellX = Math.floor((this.x - containerBox.left)/xCellSz)
 				, changedCellY  = Math.floor((this.y - containerBox.top)/yCellSz)
-				;
+				, target = null;
 			if (nodes[changedCellX] && nodes[changedCellX][changedCellY]) {
 				//существует клетка
-				with (nodes[changedCellX][changedCellY].style) {
-					left = this.cellXy.x * xCellSz + 'px';
-					top = this.cellXy.y * yCellSz + 'px';
-				}
+				target = {node: nodes[changedCellX][changedCellY]
+					, left: this.cellXy.x * xCellSz + 'px'
+					, top: this.cellXy.y * yCellSz + 'px'
+				};
 				nodes[this.cellXy.x][this.cellXy.y] = nodes[changedCellX][changedCellY];
+				nodes[changedCellX][changedCellY] = this.node;
 			} else {
 				changedCellX = this.cellXy.x;
 				changedCellY = this.cellXy.y;
 			}	
-				
-			this.node.style.opacity = 1;
-			this.node.style.zIndex = 0;
-			this.node.style.left = changedCellX * xCellSz + 'px';
-			this.node.style.top = changedCellY * yCellSz + 'px';
-			nodes[changedCellX][changedCellY] = this.node;
+			var node = this.node;
 			this.node = null;
-			//проверка на выигрыш
+
+			animation.init(changedCellX * xCellSz - parseInt(node.style.left)
+				, changedCellY * yCellSz - parseInt(node.style.top) 
+				, node
+				, function(_node) {
+					_node.style.opacity = 1;
+					_node.style.zIndex = 0;
+					if (target) {
+						target.node.style.left = target.left;
+						target.node.style.top = target.top;
+					}
+					//проверка на выигрыш
+					puzzle.checkWin();
+				}
+			);
+	
+		}
+		, checkWin: function() {
 			var win = true, maxId = -1;
 			for (var y = 0; y < Y_CNT; y++) {
 				for (var x = 0; x < X_CNT; x ++) {
@@ -214,14 +270,13 @@ var puzzle = (function(){
 					container.removeEventListener('touchstart', touchStart);		
 					container.removeEventListener('touchmove', touchMove);
 					container.removeEventListener('touchend', unhold);		
-					
+
 				} else {	
 					container.removeEventListener('mousemove', mousemove);
 					container.removeEventListener('mouseup', unhold);
 					container.removeEventListener('mouseleave', unhold);
 					container.removeEventListener('mousedown', hold);
 				}	
-
 				if (callbacks.win) {
 					App.newFrame(function() {callbacks.win(Date.now() - timer)});
 				}
