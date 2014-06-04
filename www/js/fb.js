@@ -73,7 +73,7 @@ var fbPhotos = (function($){
 		var $album = $('#album' + _aid);
 //console.log(_data);
 		_data.data.forEach(function(_el){
-			$(makeLinkToPhuzzle(_el.source, 1, '<img src="' + _el.picture + '">'))
+			$(makeLinkToPhuzzle(_el.source, -1, '<img src="' + _el.picture + '">'))
 				.appendTo($album);
 		});
 		$album.removeClass('displayNone');

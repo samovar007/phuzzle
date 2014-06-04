@@ -15,6 +15,9 @@
 })();
 
 function makeLinkToPhuzzle(_imgSrc, _complexity, _body) {
+	if (-1 == _complexity) {
+		_complexity = App.cookie.get('complexity', 1);
+	}
 	return '<a href="/?complexity=' + _complexity + '&img=' + encodeURIComponent(_imgSrc) + '">'+_body+'</a>';
 }			
 
@@ -47,7 +50,43 @@ var App = (function($) {
 			n.src = _src;
 			s.parentNode.insertBefore(n, s);
 		}	
-
+		, cookie:  {
+			get: function (sKey, _defaultValue) {
+				if (!sKey || !this.has(sKey)) {
+					return _defaultValue;
+				}
+				return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
+			}
+			, set: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+				if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+					return;
+				}
+				var sExpires = "";
+				if (vEnd) {
+					switch (vEnd.constructor) {
+					case Number:
+						sExpires = vEnd === Infinity ? "; expires=Tue, 19 Jan 2038 03:14:07 GMT" : "; max-age=" + vEnd;
+						break;
+					case String:
+						sExpires = "; expires=" + vEnd;
+						break;
+					case Date:
+						sExpires = "; expires=" + vEnd.toGMTString();
+						break;
+					}
+				}
+				document.cookie = escape(sKey) + "=" + escape(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+			}
+			, remove: function (sKey, sPath) {
+				if (!sKey || !this.has(sKey)) {
+					return;
+				}
+				document.cookie = escape(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sPath ? "; path=" + sPath : "");
+			}
+			, has: function (sKey) {
+				return (new RegExp("(?:^|;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+			}
+		}
 		, cover: {
 			init: function coverInit() {
 				$('<div id="cover" style="display: none"><div class="coverDark"></div><div id="coverText"></div>'

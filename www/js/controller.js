@@ -17,7 +17,7 @@
 			}
 			var str = '';
 			_data.entries.forEach(function(_el){
-				str += '<div class="col-xs-4">' + makeLinkToPhuzzle(_el.img.XXXL.href, 1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">') + '</div>';
+				str += '<div class="col-xs-4">' + makeLinkToPhuzzle(_el.img.XXXL.href, -1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">') + '</div>';
 			});
 			$container.html(str);
 		}	
@@ -64,6 +64,7 @@
 		if (!complexityAr[complexityIdx]) {
 			complexityIdx = 0;
 		}
+		App.cookie.set('complexity', complexityIdx, Infinity, '/');
 		showStep2(getVars.img, complexityIdx);
 
 		App.cover.text('Загружаю рисунок...');

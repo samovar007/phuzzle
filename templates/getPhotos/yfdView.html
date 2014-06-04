@@ -7,7 +7,7 @@
 		}
 		var str = '';
 		_data.entries.forEach(function(_el){
-			str += makeLinkToPhuzzle(_el.img.XXXL.href, 1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">');
+			str += makeLinkToPhuzzle(_el.img.XXXL.href, -1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">');
 		});
 		$('#photos').append('<h2>' + _header + '</h2><div class="albumData">' + str + '</div>');
 	}

@@ -71,7 +71,7 @@ var photos = (function(){
 			var $album = $('#album' + _data.response[0].aid);
 			$album.removeClass('displayNone');
 			_data.response.forEach(function(_el){
-				$(makeLinkToPhuzzle(_el.src_big, 1, '<img src="' + _el.src + '">'))
+				$(makeLinkToPhuzzle(_el.src_big, -1, '<img src="' + _el.src + '">'))
 					.appendTo($album);
 			});
 		}
