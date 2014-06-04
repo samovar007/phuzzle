@@ -6,7 +6,7 @@
 	var  complexityAr = [{complexity: [3, 3], describe: 'Легкая', game: 'puzzle'}
 			, {complexity: [6, 6], describe: 'Средняя', game: 'puzzle'}
 			, {complexity: [12, 12], describe: 'Сложная', game: 'puzzle'}
-			, {complexity: [3, 3], describe: '12 простые', game: 'twelve'}
+			, {complexity: [2, 3], describe: '12 простые', game: 'twelve'}
 			, {complexity: [3, 4], describe: 'Двянашки', game: 'twelve'}
 		];
 	//Если каких-то данных нет...

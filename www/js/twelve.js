@@ -28,7 +28,7 @@ var twelve = (function($){
 			for(x = 0; x < this.cols; x++) {
 				this.field[x] = Array(this.rows);
 				for (y = 0; y < this.rows; y++) {
-					this.field[x][y] = y * this.cols + x;
+					this.field[x][y] = x * this.rows + y;
 				}
 			}
 		}
@@ -39,7 +39,7 @@ var twelve = (function($){
 					break;
 				}
 				for (y = 0; y < this.rows; y++) {
-					if (this.field[x][y] != y * this.cols + x) {
+					if (this.field[x][y] != x * this.rows + y) {
 						win = false;
 						break;
 					}
