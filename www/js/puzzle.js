@@ -1,6 +1,7 @@
 /*
  * делает из изображения пазл
  * @author: Samoylov Vasily
+ * devphuzzle@gmail.com
  */
 
 var puzzle = (function(){

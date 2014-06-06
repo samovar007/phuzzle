@@ -2,6 +2,7 @@
  * В этой игре необходимо перемещать строки и столбцы, чтоб собрать картинку
  * Чем то напоминает кубик рубика
  * @author: Samoylov Vasily
+ * devphuzzle@gmail.com
  */
 var twelve = (function($){
 	var $container

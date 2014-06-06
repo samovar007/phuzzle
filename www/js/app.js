@@ -1,6 +1,7 @@
 /*
  * Различные утилиты для фазлов
  * @author: Samoylov Vasily
+ * devphuzzle@gmail.com
  */
 (function(){
 	var node = document.createElement('canvas');
@@ -317,6 +318,16 @@ var App = (function($) {
 			}
 			return _ending.many;
 		}
+		, getParams: function(_url) {
+			var getVars = {};
+			_url.substring(_url.indexOf('?') + 1).split('&').forEach(function(_el){
+				var tmp = _el.split('=', 2);
+				if (2 == tmp.length) {
+					getVars[tmp[0]] = decodeURIComponent(tmp[1].replace(/\+/g, '%20'));
+				}
+			});
+			return getVars;
+		}	
 	};
 }(jQuery));
 

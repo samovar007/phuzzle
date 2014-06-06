@@ -1,3 +1,8 @@
+/**
+ * 
+ * @author: Vasily Samoylov
+ * devphuzzle@gmail.com
+ */
 var fbPhotos = (function($){
 	var gotAlbumsData = {};
 	// Load the SDK asynchronously

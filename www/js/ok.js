@@ -1,3 +1,7 @@
+/**
+ * @author: Vasily Samoylov
+ * devphuzzle@gmail.com
+ */
 var okPhotos = (function($){
 	var $container = $('#photos').append('<div id="album0" class="albumData"></div><h2>Альбомы</h2>');
 	var gotAlbumsData = {};

@@ -1,5 +1,6 @@
 /* 
  * @author: Samoylov Vasily
+ * devphuzzle@gmail.com
  */
 
 (function($) {
@@ -45,17 +46,7 @@
 
 	$(document).ready(function() {
 		//Иницилизация
-		var url = window.location.search;
-		if (!url) {
-			return showStep1();
-		}
-		var getVars = {};
-		url.substring(url.indexOf('?') + 1).split('&').forEach(function(_el){
-			var tmp = _el.split('=', 2);
-			if (2 == tmp.length) {
-				getVars[tmp[0]] = decodeURIComponent(tmp[1].replace(/\+/g, '%20'));
-			}
-		});
+		var getVars = App.getParams(window.location.search);
 		if (!getVars.img) {
 			return showStep1();
 		}
