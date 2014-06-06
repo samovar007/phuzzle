@@ -94,6 +94,7 @@ var puzzle = (function(){
 				}
 			}	
 			//Перемешиваем
+			
 			var rndX, rndY, tmp;
 			for (var x = 0; x < X_CNT; x ++) {
 				for (var y = 0; y < Y_CNT; y ++) {
@@ -103,7 +104,8 @@ var puzzle = (function(){
 					nodes[rndX][rndY] = nodes[x][y];
 					nodes[x][y] = tmp;
 				}
-			}	
+			}
+			
 			//Сразу установим обработчики
 			if (!!('ontouchstart' in window)) {	//touch screen
 				container.addEventListener('touchstart', touchStart);		
