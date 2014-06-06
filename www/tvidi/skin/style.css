@@ -1,0 +1,275 @@
+/* 
+    Document   : style
+    Created on : 14.05.2014, 15:26:03
+    Author     : vsamoylov
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #fff;
+  background-color: #000;
+}
+
+body, div, p, img, form, menu {
+	margin: 0; padding: 0;
+}
+body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+a {
+	color: silver;
+}
+.asLink {
+	cursor: pointer;
+}
+.nobr {
+	white-space: nowrap;
+}
+.displayNone {
+	display: none;
+}
+#oldBrowser {
+	margin: 1em;
+}
+ 
+.puzzleCell {
+	position: absolute;
+	cursor: pointer;
+}
+#puzzle {
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	bottom: 0;
+	left: 0;
+}
+
+#cover {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+.coverDark {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: .5;
+	background: black;
+}
+#coverText {
+	text-align: center;
+	position: absolute;
+	top: 45%;
+	left: 0;
+	width: 100%;
+	color: white;
+	font-size: 300%;
+}
+#coverWnd {
+    position: relative;
+
+	background: #FFFFFF;
+    border-radius: 2px;
+    box-shadow: 0 0 10px #000000;
+    margin: 30px auto;
+    max-width: 600px;
+    padding: 3px;
+    width: 90%;
+}
+#coverWndHeader {
+	background-color: #7A7A7A;
+	background: linear-gradient(to bottom, #A9A9A9, #7A7A7A);
+	font-size: 18px;
+    text-shadow: 0 1px 0 #333333;
+    border-radius: 2px;
+    margin-bottom: 0.5em;
+    overflow: auto;
+    padding: 6px 26px 9px 15px;
+}
+#coverWndInside {
+	padding-top: 1em;
+	color: black;
+	/* text-align: center; */
+	padding-bottom: 1.5em;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#coverWnd i.closeWindow{
+	position: absolute;
+	right: 10px;
+	top: 11px;
+	font-style: normal;
+	cursor: pointer;
+	font-size: 150%;
+}	
+#coverWnd h1 {
+	padding: 0; margin: 0;
+	font-size: 150%;
+}
+.albumPic {
+	background: #222222;
+    border: 3px solid #555555;
+    color: #FFFFFF;
+    margin-top: 2em;
+    padding: 20px;
+    text-align: center;
+    width: 190px;
+	cursor: pointer;
+}
+.albumData {
+	padding: 15px 0 15px 45px;
+}
+.albumData img {
+	margin: 1%;
+}
+#photos {
+	margin: 0 10px;
+}
+
+
+.__icon {
+    background-image: url("/img/icons.png");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+.icon-pictures {
+    background-position: 0 -74px;
+    width: 25px;
+}
+.icon-help {
+    background-position: 4px -98px;
+}
+.icon-complexity {
+    background-position: 0 -50px;
+    width: 25px;
+}
+.icon-info {
+    background-position: 5px -24px;
+}
+
+
+.snicon {
+    background: url("img/socials_big.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    display: inline-block;
+	border-radius: 3px;
+}
+.snicon.fb {
+    background-position: 0 0;
+}
+.snicon.vk {
+    background-position: -32px 0;
+}
+.snicon.tw {
+    background-position: -64px 0;
+}
+.snicon.gg {
+    background-position: -96px 0;
+}
+.snicon.mr {
+    background-position: -128px 0;
+}
+.snicon.ok {
+    background-position: -160px 0;
+}
+#sharingContainer {
+	text-align: center;
+}
+#sharingContainer .snicon {
+	margin-right: 9px;
+    margin-top: 5px;
+}	
+
+.twelvecell {
+	position: absolute;
+	text-align: center;
+	cursor: pointer;
+}
+
+
+/*-----------------------*/
+.select-block{
+	margin-bottom: 40px;
+}
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+a{
+	color: #50c9a1;
+	text-decoration: none;
+}
+a:hover{
+	color: #1ca58a;
+}
+h2{
+	font-weight: normal;
+	line-height: 1.3;
+	font-size: 18px;
+}
+.text-center{
+	text-align: center;
+}
+.nobr input{
+	float: left;
+	height: 28px;
+}
+.url-input{
+	width: 70%;
+	margin-right: 5%;
+	border: none;
+	padding: 5px 10px;
+}
+
+#coverWndInside .url-input {
+	border-width: 1px;
+	border-color: silver;
+	border-style: solid;
+}
+.btn{
+	background: #50c9a1;
+	border: none;
+	color: #fff;
+	padding: 5px 10px;
+	width: 25%;
+	cursor: pointer;
+}
+#coverWndInside .btn {
+	background: #7a7a7a;
+}
+.btn:active{
+	background: #1ca58a;
+	background: linear-gradient(to bottom, #A9A9A9, #7A7A7A);
+}
