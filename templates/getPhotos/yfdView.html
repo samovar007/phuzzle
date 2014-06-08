@@ -1,6 +1,8 @@
 <!-- script type='application/json' src='http://api-fotki.yandex.ru/api/podhistory/'></script -->	
 <div id='photos'></div>
 <script>
+	App.storeLastSource('yfd');
+	
 	function showYfd(_header, _data) {
 		if (!_data.entries ||!_data.entries.length) {
 			throw new Error('Не удалось получить фото');

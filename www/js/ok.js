@@ -44,4 +44,3 @@ var okPhotos = (function($){
 
 	return obj;
 }(jQuery));
-

@@ -107,3 +107,4 @@ var fbPhotos = (function($){
   };
 })(jQuery);
 
+App.storeLastSource('fb');

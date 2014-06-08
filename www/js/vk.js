@@ -78,4 +78,3 @@ var photos = (function(){
 	};
 	return obj;
 }());
-

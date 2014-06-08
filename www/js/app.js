@@ -88,6 +88,16 @@ var App = (function($) {
 				return (new RegExp("(?:^|;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
 			}
 		}
+		, storeLastComplexity: function(_val) {
+			this.cookie.set('complexity', _val, Infinity, '/');
+		}
+		, storeLastSource: function(_val) {
+			this.cookie.set('sourcePage', _val, Infinity, '/');
+		}
+		, getLastSource: function() {
+			var val = this.cookie.get('sourcePage', 'yfd');
+			return -1 == ['fb', 'ok', 'vk', 'yfd'].indexOf(val) ? 'yfd' : val;
+		}
 		, cover: {
 			init: function coverInit() {
 				$('<div id="cover" style="display: none"><div class="coverDark"></div><div id="coverText"></div>'

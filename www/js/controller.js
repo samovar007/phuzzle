@@ -55,7 +55,7 @@
 		if (!complexityAr[complexityIdx]) {
 			complexityIdx = 0;
 		}
-		App.cookie.set('complexity', complexityIdx, Infinity, '/');
+		App.storeLastComplexity(complexityIdx);
 		showStep2(getVars.img, complexityIdx);
 
 		App.cover.text('Загружаю рисунок...');
@@ -78,7 +78,7 @@
 					+ '<a target=_blank href="#" class="snicon fb" onclick="return App.popup(App.sharing.fb());"></a>'
 					+ '<a target=_blank href="#" class="snicon tw" onclick="return App.popup(App.sharing.tw());"></a>'
 					+ '</div>'
-					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/yfd/" class="btn">Другое фото</a></footer>';
+					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
 				App.cover.wnd('Пазл собран!', wndBody);
 			}
 			, successLoad: function() {
