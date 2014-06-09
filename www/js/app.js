@@ -143,7 +143,7 @@ var App = (function($) {
 			}
 			, ok: function() {
 				return 'http://www.odnoklassniki.ru/dk?st.cmd=addShare'
-					+ '&st.comments=' + encodeURIComponent(this.txt)
+					+ '&st.comments=' + encodeURIComponent(this.title + ' ' + this.txt)
 					+ '&st._surl='    + encodeURIComponent(this.url);
 			}
 			, fb: function() {
@@ -155,7 +155,7 @@ var App = (function($) {
 			}
 			, tw: function() {
 				return 'http://twitter.com/share'
-					+ '?text='      + encodeURIComponent(this.txt)
+					+ '?text='      + encodeURIComponent(this.title + ' ' + this.txt)
 					+ '&url='      + encodeURIComponent(this.url)
 					;//+ '&counturl=' + encodeURIComponent(this.url);
 			}
