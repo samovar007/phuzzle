@@ -148,8 +148,8 @@ var App = (function($) {
 			}
 			, fb: function() {
 				return 'http://www.facebook.com/sharer.php?'
-					+ 't='     + encodeURIComponent(this.title)
-					+ '&u='       + encodeURIComponent(this.url + '&pageimage=' + this.img)
+					+ 't='     + encodeURIComponent(this.title + ' ' + this.txt)
+					+ '&u='       + encodeURIComponent(this.url)
 					;
 			}
 			, tw: function() {
