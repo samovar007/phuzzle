@@ -16,7 +16,7 @@ function redirect($_url) {
  * @return string
  * @throws Exception
  */
-function getByCurl($_url) {
+function getByCurl($_url, $_postFields = '') {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_VERBOSE, 0);
 	curl_setopt($curl, CURLOPT_URL, $_url);
@@ -25,6 +25,10 @@ function getByCurl($_url) {
 	curl_setopt($curl, CURLOPT_HEADER, 0);
 	if (defined('CFG_CURL_PROXY')) {
 		curl_setopt($curl, CURLOPT_PROXY, CFG_CURL_PROXY);
+	}
+	if ($_postFields) {
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $_postFields);
 	}
 	$content = curl_exec($curl);
 	$error = curl_error($curl);

@@ -19,7 +19,7 @@ abstract class AbModel {
 	public function __construct($_params) {
 		foreach (array('clientId', 'secretKey', 'retpath') as $f) {
 			if (!isset($_params[$f])) {
-				throw new Exception('Отсутствует обязательный параметр ' . $f);
+				throw new \Exception('Отсутствует обязательный параметр ' . $f);
 			}
 			$this->provider = $_params;
 		}

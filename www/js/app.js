@@ -96,7 +96,7 @@ var App = (function($) {
 		}
 		, getLastSource: function() {
 			var val = this.cookie.get('sourcePage', 'yfd');
-			return -1 == ['fb', 'ok', 'vk', 'yfd'].indexOf(val) ? 'yfd' : val;
+			return -1 == ['fb', 'ok', 'vk', 'ig', 'yfd'].indexOf(val) ? 'yfd' : val;
 		}
 		, cover: {
 			init: function coverInit() {

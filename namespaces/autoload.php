@@ -9,7 +9,7 @@ spl_autoload_register (function ($_className) {
 		. str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR 
 		. substr($_className, $lastNsPos + 1) . '.php';
 	if (!include($fileName)) {
-		throw new Exception('Не найден класс ' . $_className);
+		throw new \Exception('Не найден класс ' . $_className);
 	}
 	return true;
 });

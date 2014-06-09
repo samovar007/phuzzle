@@ -304,6 +304,9 @@ a.topItem {
 .snicon.ok {
     background-position: -160px 0;
 }
+.snicon.ig {
+    background-position: -192px 0;
+}
 
 #sharingContainer .snicon {
 	margin-right: 9px;

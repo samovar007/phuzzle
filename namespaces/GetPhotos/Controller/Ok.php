@@ -13,8 +13,6 @@ class Ok extends SocialAuth {
 	
 	protected function getPhotos($_authParams) {
 		return \Common\Templater::render('okView.html');
-		//var_dump($_authParams);
-		//exit;
 	}
 	protected function jsonAction() {
 		$data = $this->getSessionData();
