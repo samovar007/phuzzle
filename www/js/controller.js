@@ -57,12 +57,11 @@
 		}
 		App.storeLastComplexity(complexityIdx);
 		showStep2(getVars.img, complexityIdx);
-
 		App.cover.text('Загружаю рисунок...');
 		var callbacks = {	
 			win: function(_msec) {
 				var s = Math.floor(_msec/1000);
-				App.sharing.init(location.href
+				App.sharing.init(location.protocol + '//' + location.host + '/toSn/' + location.search
 					, 'Фазлы - пазлы из любого изображения'
 					, getVars.img
 					, 'Я собрал этот пазл за ' + s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''})

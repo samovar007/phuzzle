@@ -147,11 +147,10 @@ var App = (function($) {
 					+ '&st._surl='    + encodeURIComponent(this.url);
 			}
 			, fb: function() {
-				return 'http://www.facebook.com/sharer.php?s=100'
-					+ '&p[title]='     + encodeURIComponent(this.title)
-					+ '&p[summary]='   + encodeURIComponent(this.txt)
-					+ '&p[url]='       + encodeURIComponent(this.url)
-					+ '&p[images][0]=' + encodeURIComponent(this.img);
+				return 'http://www.facebook.com/sharer.php?'
+					+ 't='     + encodeURIComponent(this.title)
+					+ '&u='       + encodeURIComponent(this.url + '&pageimage=' + this.img)
+					;
 			}
 			, tw: function() {
 				return 'http://twitter.com/share'
