@@ -78,6 +78,7 @@
 					+ '<a target=_blank href="#" class="snicon fb" onclick="return App.popup(App.sharing.fb());"></a>'
 					+ '<a target=_blank href="#" class="snicon tw" onclick="return App.popup(App.sharing.tw());"></a>'
 					+ '</div>'
+					+ '<p>Или разместите <a href="' + location.href + '">ссылку</a> самостоятельно.</p>' 
 					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
 				App.cover.wnd('Пазл собран!', wndBody);
 			}
