@@ -7,7 +7,7 @@ if (checkBrowser) {
 
 (function($) {
 	var TOP_PAGE = document.referrer
-		, IMG = 'http://storage1.tvidi.com/MyWorld/Users/9/c/8/23951_130465174499168413623_Original.png'
+		, IMG = 'http://storage1.tvidi.com/MyWorld/Users/9/c/4/23951_130467800317377272639_Original.jpg'
 		, getParams = App.getParams(window.location.search)
 		;
 		
