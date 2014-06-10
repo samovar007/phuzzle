@@ -37,7 +37,7 @@ var App = (function($) {
 					+'</form>'
 			);
 		}
-		, popup: function(_url) {
+		, popup: function(_url, _e) {
 			window.open(_url, '', 'toolbar=0,status=0,width=626,height=436');
 			return false;
 		}
@@ -169,6 +169,19 @@ var App = (function($) {
 				return 'https://plus.google.com/share'
 					+ '?url='          + encodeURIComponent(this.url)
 					;	
+			}
+			, onclick: function(_el) {
+				var _this = App.sharing
+					, sharingType = _el.getAttribute('appSharingType')
+					;
+				if (!_this[sharingType]) {
+					return false;
+				}	
+				App.popup(_this[sharingType]());
+				if (ga) {
+					ga('send', 'event', 'sharing', sharingType);
+				}
+				return false;
 			}
 		}
 		, newFrame: (window.requestAnimationFrame

@@ -70,12 +70,12 @@
 					+ s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''})
 					+ '! Поделитесь своим успехом с друзьями!'
 					+ '<div id="sharingContainer">'
-					+ '<a target=_blank href="#" class="snicon vk" onclick="return App.popup(App.sharing.vk());"></a>'
-					+ '<a target=_blank href="#" class="snicon ok" onclick="return App.popup(App.sharing.ok());"></a>'
-					+ '<a target=_blank href="#" class="snicon mr" onclick="return App.popup(App.sharing.mr());"></a>'
-					+ '<a target=_blank href="#" class="snicon gg" onclick="return App.popup(App.sharing.gg());"></a>'
-					+ '<a target=_blank href="#" class="snicon fb" onclick="return App.popup(App.sharing.fb());"></a>'
-					+ '<a target=_blank href="#" class="snicon tw" onclick="return App.popup(App.sharing.tw());"></a>'
+					+ '<a target=_blank href="#" class="snicon vk" appSharingType="vk" onclick="return App.sharing.onclick(this);"></a>'
+					+ '<a target=_blank href="#" class="snicon ok" appSharingType="ok" onclick="return App.sharing.onclick(this);"></a>'
+					+ '<a target=_blank href="#" class="snicon mr" appSharingType="mr" onclick="return App.sharing.onclick(this);"></a>'
+					+ '<a target=_blank href="#" class="snicon gg" appSharingType="gg" onclick="return App.sharing.onclick(this);"></a>'
+					+ '<a target=_blank href="#" class="snicon fb" appSharingType="fb" onclick="return App.sharing.onclick(this);"></a>'
+					+ '<a target=_blank href="#" class="snicon tw" appSharingType="tw" onclick="return App.sharing.onclick(this);"></a>'
 					+ '</div>'
 					+ '<p>Или разместите <a href="' + location.href + '">ссылку</a> самостоятельно.</p>' 
 					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
