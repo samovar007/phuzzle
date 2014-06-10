@@ -61,6 +61,10 @@
 		var callbacks = {	
 			win: function(_msec) {
 				var s = Math.floor(_msec/1000);
+				if (ga) {
+					ga('send', 'event', 'puzzleComplete', complexityIdx);
+				}
+
 				App.sharing.init(location.protocol + '//' + location.host + '/toSn/' + location.search
 					, 'Фазлы - пазлы из любого изображения'
 					, getVars.img
