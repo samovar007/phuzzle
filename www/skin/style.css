@@ -114,6 +114,8 @@ a.topItem {
 .topItem .submenuHeader {
 	padding: 6px 10px;
 	cursor: pointer;
+	position: relative;
+	z-index: 50;
 }
 .topItem.withSubmenu .submenu {
 	display: none;
