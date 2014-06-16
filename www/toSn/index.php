@@ -38,7 +38,7 @@ $thisUrl = 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 	ga('create', 'UA-51202174-1', 'phuzzle.ru');
 	ga('send', 'pageview');
 	
-	//location.href='<?=addslashes($url)?>';
+	location.href='<?=addslashes($url)?>';
 </script>	
 </head><body>
 </body></html>	
