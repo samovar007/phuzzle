@@ -47,16 +47,9 @@ class Ya extends AbModel {
 			, array(CURLOPT_HEADER => 1, CURLOPT_FOLLOWLOCATION => false)
 			);	
 		if (!preg_match('/Location: (http:\/\/[^\s]+)/mi', $rawData, $ar)) {
-			throw new \Exception('Не удалось получить фото, возможно вы не зарегистрированы');
+			throw new \Common\UserException('Не удалось получить сервисный документ, возможно вы не зарегистрированы на Яндекс-фотках');
 		} 
 		return $ar[1];
-//		if (!$rawData) {
-//			throw new \Exception('Не удалось получить документ с ссылками на альбомы');
-//		}
-//		
-//		$encodedData = json_decode($rawData, true);
-//var_dump($encodedData); exit;			
-//		return $rawData;
 	}
 }
 
