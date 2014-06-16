@@ -177,6 +177,7 @@ a.topItem {
 	height: 100%;
 	top: 0;
 	left: 0;
+	z-index: 50;
 }
 .coverDark {
 	position: absolute;
@@ -308,6 +309,9 @@ a.topItem {
 }
 .snicon.ig {
     background-position: -192px 0;
+}
+.snicon.ya {
+    background-position: -224px 0;
 }
 
 #sharingContainer .snicon {

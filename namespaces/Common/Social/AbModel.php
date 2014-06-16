@@ -55,7 +55,7 @@ abstract class AbModel {
 	abstract public function getToken();
 	
 	/**
-	 * Возврвfoftn профиль пользователя
+	 * Возвращает профиль пользователя
 	 */
 	abstract public function getProfile($_token);
 	
