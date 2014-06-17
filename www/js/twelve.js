@@ -128,7 +128,7 @@ var twelve = (function($){
 			if (this.isFree()) {
 				return;
 			}
-			_cb = _cb || {}
+			_cb = _cb || {};
 			var d;
 			if (this.mode == DETECTING) {
 				var dx = Math.abs(_x - this.x)
@@ -181,13 +181,13 @@ var twelve = (function($){
 		return false;
 	}
 	function mousemove(_e) {
-		App.newFrame(function(){rowcols.move(_e.pageX, _e.pageY, internalCb)});
+		App.newFrame(function(){rowcols.move(_e.pageX, _e.pageY, internalCb);});
 		_e.preventDefault();
 		return false;
 	}
 	function touchMove(_e) {
 		var firstE = _e.originalEvent.touches[0];
-		App.newFrame(function(){rowcols.move(firstE.pageX, firstE.pageY, internalCb)});
+		App.newFrame(function(){rowcols.move(firstE.pageX, firstE.pageY, internalCb);});
 		_e.preventDefault();
 		return false;
 	}
@@ -456,6 +456,9 @@ var twelve = (function($){
 			$containerIn.on('mouseleave', unhold);
 			$containerIn.on('mousedown', hold);
 		}	
+		$(window).on('resize', function resize() {
+			reshow();
+		});			
 	}
 	function clearEventListener() {
 		$containerIn.off('mousemove', mousemove);
@@ -471,14 +474,14 @@ var twelve = (function($){
 		run: function(_imgSrc, _containerNode, _complexity, _callbacks, _helpNode) {
 			columns = _complexity[0];
 			rows = _complexity[1];
-			helpNode = _helpNode
+			helpNode = _helpNode;
 
 			externalCb = _callbacks || {};
 			if (!externalCb.onError) {
 				externalCb.onError = function onError(_str) {
 					throw new Exception(_str);
-					alert(_str)
-				}
+					alert(_str);
+				};
 			}
 			
 			containerNode = _containerNode;

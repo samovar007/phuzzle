@@ -5,7 +5,7 @@
  */
 
 $img = isset($_GET['img']) ? preg_replace('/[^-a-zA-Z0-9\._:&=\?\/]+/', '', $_GET['img']) : '';
-$complexity = isset($_GET['complexity']) ? (int)$_GET['complexity'] : 1;
+//$complexity = isset($_GET['complexity']) ? (int)$_GET['complexity'] : 1;
 $url = 'http://' . $_SERVER['HTTP_HOST'] . '/?' . $_SERVER['QUERY_STRING'];
 $thisUrl = 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 ?>

@@ -14,7 +14,7 @@ var puzzle = (function(){
 		, containerBox
 		, callbacks	//калбаки на некоторые события
 		, timer
-		, borderHeight = 6	
+		, borderHeight = 6
 		, borderWidth = 6
 		, animationStepX
 		, animationStepY
@@ -76,7 +76,7 @@ var puzzle = (function(){
 			if (!callbacks.onError) {
 				callbacks.onError = function onError(_str) {
 					throw new Exception(_str);
-				}
+				};
 			}
 			container = _container;
 			containerBox = container.getBoundingClientRect();
@@ -120,6 +120,10 @@ var puzzle = (function(){
 				container.addEventListener('mouseleave', unhold);
 				container.addEventListener('mousedown', hold);		
 			}	
+			$(window).on('resize', function resize() {
+				reshow();
+			});			
+
 			//Формируем канву-подсказку
 			var helpCanvas;
 			if (_helpNode) {
