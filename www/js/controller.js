@@ -8,6 +8,7 @@
 			, {complexity: [6, 6], describe: 'Средняя', game: 'puzzle'}
 			, {complexity: [12, 12], describe: 'Сложная', game: 'puzzle'}
 			, {complexity: [3, 4], describe: 'Фрубик', game: 'twelve'}
+			, {describe: 'Пятнашки', game: 15}
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
@@ -97,14 +98,19 @@
 				, callbacks				
 				, document.getElementById('puzzleHelp')
 			);
-		} else {
+		} else if (complexityAr[complexityIdx].game == 'twelve') {
 			twelve.run(getVars.img
 				, document.getElementById('puzzle')
 				,  complexityAr[complexityIdx].complexity
 				, callbacks
 				, document.getElementById('puzzleHelp')
 			);
-			App.cover.off();
+		} else {
+			fifteen.run(getVars.img
+				, document.getElementById('puzzle')
+				, callbacks				
+				, document.getElementById('puzzleHelp')
+			);
 		}		
 	});
 }(jQuery));

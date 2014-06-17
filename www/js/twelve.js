@@ -372,6 +372,10 @@ var twelve = (function($){
 
 		timer = Date.now();
 		reshow();
+		if (externalCb.successLoad) {
+			externalCb.successLoad();
+		}
+
 	}
 	
 	function reshow() {
