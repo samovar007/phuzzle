@@ -1,9 +1,8 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Пятнашки
+ * @author: Samoylov Vasily
+ * devphuzzle@gmail.com
  */
-
-
 var fifteen = (function($){
 	var columns = 4
 		, rows = 4
