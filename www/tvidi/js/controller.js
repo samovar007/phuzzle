@@ -49,7 +49,7 @@ if (checkBrowser) {
 				, null
 			);
 		} else {		
-			twelve.run(IMG
+			twelve.run('http://phuzzle.ru/charactersPromBack.png'
 				, document.getElementById('puzzle')
 				, [4, 3]
 				, callbacks
