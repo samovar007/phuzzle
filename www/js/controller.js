@@ -9,8 +9,8 @@
 			, {complexity: [12, 12], describe: 'Фазл 12x12', game: 'puzzle'}
 			, {complexity: [3, 4], describe: 'Фрубик', game: 'twelve'}
 			, {describe: 'Пятнашки', game: 15}
-			, {complexity: [6, 6, 0], describe: 'Детские фёртыши', game: 'phertish'}
-			, {complexity: [3, 3, 1], describe: 'Фёртыши', game: 'phertish'}
+			, {complexity: [6, 6, 0], describe: 'Детский фёртыш', game: 'phertish'}
+			, {complexity: [3, 3, 1], describe: 'Фёртыш', game: 'phertish'}
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
@@ -69,7 +69,7 @@
 				}
 
 				App.sharing.init(location.protocol + '//' + location.host + '/toSn/' + location.search
-					, 'Фазлы - пазлы из любого изображения'
+					, 'Фазлы - головоломки из любого изображения'
 					, getVars.img
 					, 'Я собрал этот пазл за ' + s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''})
 				);

@@ -363,15 +363,12 @@ var App = (function($) {
 $(document).ready(function() {
 	App.cover.init();
 	$('.topItem.withSubmenu .submenuHeader').hover(function() {
-console.log('hover');		
 		$('.topItem.withSubmenu .submenu').hide();
 		$('.submenu', $(this).parent()).show();
 	});
 	$('.topItem.withSubmenu .submenu').mouseleave(function() { 
-console.log('leave');		
 		$(this).hide();
 	});
-	
 });
 
 

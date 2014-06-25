@@ -11,11 +11,10 @@ $thisUrl = 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 ?>
 <!DOCTYPE html>
 <html><head>
-<title>Фазлы - фотопазлы</title>
+<title>Фазлы - фотоголоволомки</title>
 
-<meta name="description" content="Пазл из любого изображения. Делитесь ссылками на свои пазлы в соцсетях. Подходит как взрослым, так и детям. Есть минутка - фазлы!">
-<meta name="keywords" content="Пазлы, развлечения, фото, фотопазлы, фазлы, пятнашки, фрубик">
-<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+<meta name="description" content="Головоломки из любого изображения: пазлы, пятнашки, фрубик, фёртыш. Делитесь ссылками на свои пазлы в соцсетях. Подходит как взрослым, так и детям. Есть минутка - фазлы!">
+<meta name="keywords" content="Головоломки, пазлы, фёртыш, развлечения, фото, фотопазлы, фазлы, пятнашки, фрубик">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -24,11 +23,11 @@ $thisUrl = 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 <link rel="apple-touch-icon" href="/favicon32.png"> 
 <link href='/skin/style.css' rel='stylesheet' type='text/css'>
 
-<meta property="og:site_name" content="Фазлы - фотопазлы">
-<meta property="og:title" content="Пазл из фото">
+<meta property="og:site_name" content="Фазлы">
+<meta property="og:title" content="Фазлы - фотоголоволомки">
 <meta property="og:image" content="<?= $img?>">
 <meta property="og:url" content="<?= addslashes($thisUrl)?>">
-<meta property="og:description" content="">
+<meta property="og:description" content="Головоломки из любого изображения: пазлы, пятнашки, фрубик, фёртыш. Делитесь ссылками на свои пазлы в соцсетях. Подходит как взрослым, так и детям. Есть минутка - фазлы!">
 <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
