@@ -14,6 +14,7 @@ var fifteen = (function($){
 		, canvases
 		, externalCb
 		, timer
+		, holdFlag = false;
 		;
 	
 	var game = {
@@ -200,7 +201,6 @@ var fifteen = (function($){
 		App.newFrame(function() {externalCb.win(Date.now() - timer);});
 	}
 	function setEventListener() {
-		$containerIn.on('click', clickCell);
 		if (!!('ontouchstart' in window)) {	//touch screen
 			$(window).on('orientationchange', function() {
 				//Без таймаута на моем планшете работает не верно
@@ -208,7 +208,9 @@ var fifteen = (function($){
 			});
 			$containerIn.on('touchmove', touchMove);
 		} else {
-			//$containerIn.on('mousemove', clickCell);
+			$containerIn.on('mousedown', mouseDown);
+			$containerIn.on('mouseup', clickCell);
+			$containerIn.on('mousemove', clickCell);
 		}	
 		$(window).on('resize', function resize() {
 			reshow();
@@ -238,9 +240,16 @@ var fifteen = (function($){
 		return true
 	}
 	function clickCell(_e) {
+		if (!holdFlag) {
+			return false;
+		}	
 		shiftCell(_e.target);
+		holdFlag = false;
 		_e.preventDefault();
 		return false;
+	}
+	function mouseDown(_e) {
+		holdFlag = true;
 	}
 	function touchMove(_e) {
 		var firstE = _e.originalEvent.touches[0];
