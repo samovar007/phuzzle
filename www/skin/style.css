@@ -77,6 +77,8 @@ header.top {
 	height: 30px;
 	line-height: 18px;
 	float: right;
+	position: relative;
+	z-index: 50;
 }
 .topItem:hover, header.top .topItem:active {
 	background-color: #50C9A1;
@@ -108,7 +110,6 @@ a.topItem {
 	border-radius: 3px;
 }	
 .topItem.withSubmenu {
-	position: relative;
 	padding: 0;
 }
 .topItem .submenuHeader {

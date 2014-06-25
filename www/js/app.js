@@ -199,7 +199,7 @@ var App = (function($) {
 		}
 		, createCanvasAr: function(_containerNode, _img, _params, _cb) {
 			['borderWidth', 'borderHeight', 'cols', 'rows'].forEach(function(_e){
-				if (!_params[_e]) {
+				if ('undefined' == typeof(_params[_e])) {
 					throw new Error('Отсутствует обязательный параметр ' + _e + ' при вызове App.createCanvasAr');
 				}
 			});
@@ -221,11 +221,12 @@ var App = (function($) {
 			var yCellSz = Math.floor(Math.ceil(koef * (_img.height + 2*yImgBorder))/Y_CNT);
 				//В процессе получится, что мы немного обрежим исходную картинку, чтоб получилось целое количество клеток
 					//кладем в массив канв функцию создания
-			var canvasFactory = function(x, y, _canvas) {
+			var canvasFactory = function(x, y, _canvas, _cb) {
 				var sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight
 					, border = 0
 					, X_FIRST = 0x1, X_LAST = 0x2, Y_FIRST=0x4, Y_LAST=0x8;
 
+				_cb = _cb || {};		
 				if (0 == x) { //x
 					sX = 0;
 					sWidth = xImgSz - xImgBorder;
@@ -254,17 +255,23 @@ var App = (function($) {
 					sHeight = yImgSz;
 					dY = 0;
 					dHeight = yCellSz;
-					if (Y_CNT-1 == y) {
+					if (Y_CNT - 1 == y) {
 						sHeight -= yImgBorder;
 						dHeight -= _params.borderHeight;
 						border |= Y_LAST;
 					}
 				}	
 
-				var canvas =  _canvas
-					, ctx = _canvas.getContext('2d');
-				App.resizeCanvas(_canvas, xCellSz, yCellSz);
+				if (_cb.customDraw) {
+					_cb.customDraw(
+							{img: _img, x: sX, y: sY, width: sWidth, height: sHeight}
+							, {canvas: _canvas, x: dX, y: dY, width: dWidth, height: dHeight}
+						);
+					return _canvas;
+				}
 
+				var ctx = _canvas.getContext('2d');
+				App.resizeCanvas(_canvas, xCellSz, yCellSz);
 				//рисуем линии
 				if (border) {
 					ctx.beginPath();
@@ -356,10 +363,12 @@ var App = (function($) {
 $(document).ready(function() {
 	App.cover.init();
 	$('.topItem.withSubmenu .submenuHeader').hover(function() {
+console.log('hover');		
 		$('.topItem.withSubmenu .submenu').hide();
 		$('.submenu', $(this).parent()).show();
 	});
 	$('.topItem.withSubmenu .submenu').mouseleave(function() { 
+console.log('leave');		
 		$(this).hide();
 	});
 	

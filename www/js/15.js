@@ -280,6 +280,11 @@ var fifteen = (function($){
 			setEventListener();	
 			img = new Image();
 			img.addEventListener('load', onImageLoaded);
+			img.addEventListener('error', function() {
+				App.cover.off();
+				alert('Ошибка загрузки изображения');
+			});
+			
 			img.src = _imgSrc;
 		}
 	};

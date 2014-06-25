@@ -192,13 +192,17 @@ var puzzle = (function(){
 			} // reshow
 			
 			img.addEventListener('load', function () {
-				
 				reshow();
 				timer = Date.now();
 				if (callbacks.successLoad) {
 					callbacks.successLoad();
 				}
 			});	
+			img.addEventListener('error', function() {
+				App.cover.off();
+				alert('Ошибка загрузки изображения');
+			});
+
 			img.src = _imgSrc;
 
 			

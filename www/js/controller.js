@@ -4,11 +4,13 @@
  */
 
 (function($) {
-	var  complexityAr = [{complexity: [3, 3], describe: 'Легкая', game: 'puzzle'}
-			, {complexity: [6, 6], describe: 'Средняя', game: 'puzzle'}
-			, {complexity: [12, 12], describe: 'Сложная', game: 'puzzle'}
+	var  complexityAr = [{complexity: [3, 3], describe: 'Фазл 3x3', game: 'puzzle'}
+			, {complexity: [6, 6], describe: 'Фазл 6x6', game: 'puzzle'}
+			, {complexity: [12, 12], describe: 'Фазл 12x12', game: 'puzzle'}
 			, {complexity: [3, 4], describe: 'Фрубик', game: 'twelve'}
 			, {describe: 'Пятнашки', game: 15}
+			, {complexity: [6, 6, 0], describe: 'Детские фёртыши', game: 'phertish'}
+			, {complexity: [3, 3, 1], describe: 'Фёртыши', game: 'phertish'}
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
@@ -91,27 +93,40 @@
 			} 
 		};
 
-		if (complexityAr[complexityIdx].game == 'puzzle') {
-			puzzle.run(getVars.img
-				, document.getElementById('puzzle')
-				, complexityAr[complexityIdx].complexity
-				, callbacks				
-				, document.getElementById('puzzleHelp')
-			);
-		} else if (complexityAr[complexityIdx].game == 'twelve') {
-			twelve.run(getVars.img
-				, document.getElementById('puzzle')
-				,  complexityAr[complexityIdx].complexity
-				, callbacks
-				, document.getElementById('puzzleHelp')
-			);
-		} else {
-			fifteen.run(getVars.img
-				, document.getElementById('puzzle')
-				, callbacks				
-				, document.getElementById('puzzleHelp')
-			);
-		}		
+		var gameType = complexityAr[complexityIdx].game;
+		switch (gameType) {
+			case 'puzzle':
+				puzzle.run(getVars.img
+					, document.getElementById('puzzle')
+					, complexityAr[complexityIdx].complexity
+					, callbacks				
+					, document.getElementById('puzzleHelp')
+				);
+				break;
+			case 'twelve':
+				twelve.run(getVars.img
+					, document.getElementById('puzzle')
+					,  complexityAr[complexityIdx].complexity
+					, callbacks
+					, document.getElementById('puzzleHelp')
+				);
+				break;
+			case 15:
+				fifteen.run(getVars.img
+					, document.getElementById('puzzle')
+					, callbacks				
+					, document.getElementById('puzzleHelp')
+				);
+				break;
+			case 'phertish':
+				phertish.run(getVars.img
+					, document.getElementById('puzzle')
+					,  complexityAr[complexityIdx].complexity
+					, callbacks
+					, document.getElementById('puzzleHelp')
+				);
+				break;
+		}
 	});
 }(jQuery));
 
