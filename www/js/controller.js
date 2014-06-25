@@ -3,6 +3,24 @@
  * devphuzzle@gmail.com
  */
 
+/**
+ * Для шаринга в одноклассниках
+ * @returns {undefined}
+ */
+!function (d, id, did, st) {
+  var js = d.createElement("script");
+  js.src = "http://connect.ok.ru/connect.js";
+  js.onload = js.onreadystatechange = function () {
+  if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+    if (!this.executed) {
+      this.executed = true;
+      //setTimeout(function () {onOkConnectReady()}, 0);
+    }
+  }}
+  d.documentElement.appendChild(js);
+}(document);
+
+
 (function($) {
 	var  complexityAr = [{complexity: [3, 3], describe: 'Фазл 3x3', game: 'puzzle'}
 			, {complexity: [6, 6], describe: 'Фазл 6x6', game: 'puzzle'}
@@ -78,7 +96,8 @@
 					+ '! Поделитесь своим успехом с друзьями!'
 					+ '<div id="sharingContainer">'
 					+ '<a target=_blank href="#" class="snicon vk" appSharingType="vk" onclick="return App.sharing.onclick(this);"></a>'
-					+ '<a target=_blank href="#" class="snicon ok" appSharingType="ok" onclick="return App.sharing.onclick(this);"></a>'
+					//+ '<a target=_blank href="#" class="snicon ok" appSharingType="ok" onclick="return App.sharing.onclick(this);"></a>'
+					+ '<div id="ok-sharing-widget" class="snicon ok" style="display: inline-block"></div>'
 					+ '<a target=_blank href="#" class="snicon mr" appSharingType="mr" onclick="return App.sharing.onclick(this);"></a>'
 					+ '<a target=_blank href="#" class="snicon gg" appSharingType="gg" onclick="return App.sharing.onclick(this);"></a>'
 					+ '<a target=_blank href="#" class="snicon fb" appSharingType="fb" onclick="return App.sharing.onclick(this);"></a>'
@@ -87,6 +106,10 @@
 					+ '<p>Или разместите <a href="' + location.href + '">ссылку</a> самостоятельно.</p>' 
 					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
 				App.cover.wnd('Пазл собран!', wndBody);
+
+				OK.CONNECT.insertShareWidget("ok-sharing-widget"
+					, App.sharing.url.replace(/http%3A/, '')	//одноглазники не шарят, если есть http
+					, "{width:32,height:32,st:'rounded',sz:30,nt:1,nc:1}");
 			}
 			, successLoad: function() {
 				App.cover.off();
