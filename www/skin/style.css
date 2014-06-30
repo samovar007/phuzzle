@@ -121,7 +121,7 @@ a.topItem {
 .topItem.withSubmenu .submenu {
 	display: none;
 	right: 0;
-	min-width: 100%;
+	min-width: 120px;
     padding-top: 39px;
     position: absolute;
     text-align: left;
