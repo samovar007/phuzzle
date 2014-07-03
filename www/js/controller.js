@@ -30,6 +30,8 @@
 			, {complexity: [6, 6, 0], describe: 'Фёртыш детский', game: 'phertish'}
 			, {complexity: [3, 3, 1], describe: 'Фёртыш 3x3', game: 'phertish'}
 			, {complexity: [5, 5, 1], describe: 'Фёртыш 5x5', game: 'phertish'}
+			, {complexity: [3, 3, 1], describe: 'Раскладушка', game: 'untuck'}
+			
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
@@ -144,6 +146,14 @@
 				break;
 			case 'phertish':
 				phertish.run(getVars.img
+					, document.getElementById('puzzle')
+					,  complexityAr[complexityIdx].complexity
+					, callbacks
+					, document.getElementById('puzzleHelp')
+				);
+				break;
+			case 'untuck':
+				untuck.run(getVars.img
 					, document.getElementById('puzzle')
 					,  complexityAr[complexityIdx].complexity
 					, callbacks

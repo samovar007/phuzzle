@@ -8,3 +8,10 @@ RewriteRule ^(.*)(\.htc|\.jpg|\.gif|\.jpeg|\.css|\.js|\.xml|\.xsl|\.png|\.html|\
 
 RewriteRule ^getPhotos\/(.+)\/?.*$ getPhotos/index.php [NC,QSA,L]
 
+SetOutputFilter DEFLATE
+<IfModule mod_setenvif.c>
+  SetEnvIfNoCase Request_URI \.(?:rar|zip)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:gif|jpg|png)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:avi|mov|mp4)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.mp3$ no-gzip dont-vary
+</IfModule>
