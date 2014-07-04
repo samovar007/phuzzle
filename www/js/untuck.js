@@ -422,6 +422,12 @@ var untuck = (function($){
 					, _xTgtInfo.sz, _yTgtInfo.sz //высота и ширина в канве
 				);
 		};
+		
+		var writeBorder = function(_canvas) {
+			var ctx = _canvas.getContext('2d');
+			ctx.strokeStyle="#777777";
+			ctx.strokeRect(0, 0, _canvas.width, _canvas.height);
+		}
 			
 			
 		return {
@@ -505,6 +511,7 @@ var untuck = (function($){
 				//возможно и не здесь, т.к. надо как-то возвращать эти данные наружу
 				//возможно, если статус очень большой (abs), то просто ничего не выводить
 				collection.forEach(function(_obj){
+					
 					//todo: !!!здесь надо определять, это сложение или раскладывание!!!
 					//при этом как то менять угол?!!
 					var virtState = _obj.state.y
@@ -532,6 +539,9 @@ var untuck = (function($){
 									;
 								//сброс трансформаций и очистка канвы	
 								canvas.width = canvas.width;	
+								//рисуем прямоугольник
+								writeBorder(_obj.node);
+
 								//переносим точку начала координат
 								if (infoX.translate || infoY.translate) {
 									ctx.translate(infoX.translate, infoY.translate);
@@ -598,6 +608,8 @@ var untuck = (function($){
 									;
 								//сброс трансформаций и очистка канвы	
 								canvas.width = canvas.width;	
+								//рисуем прямоугольник
+								writeBorder(_obj.node);
 								//переносим точку начала координат
 								if (infoX.translate || infoY.translate) {
 									ctx.translate(infoX.translate, infoY.translate);
