@@ -7,7 +7,7 @@ if (checkBrowser) {
 
 (function($) {
 	var TOP_PAGE = document.referrer
-		, IMG = 'http://storage1.tvidi.com/MyWorld/Users/9/c/4/23951_130467800317377272639_Original.jpg'
+		, IMG 
 		, getParams = App.getParams(window.location.search)
 		;
 		
@@ -40,22 +40,38 @@ if (checkBrowser) {
 			} 
 		};
 		App.cover.text('Загружаю рисунок...');
-
-		if (getParams.mode && getParams.mode=='phuzzle') {
-			puzzle.run(IMG
-				, document.getElementById('puzzle')
-				, [6, 6]
-				, callbacks				
-				, null
-			);
-		} else {		
-			twelve.run('http://phuzzle.ru/charactersPromBack.png'
-				, document.getElementById('puzzle')
-				, [4, 3]
-				, callbacks
-				, null
-			);
+		
+		var gameMode = getParams.mode ?  getParams.mode: 'default';
+		switch (gameMode) {
+			case 'phuzzle':
+				IMG = 'http://storage1.tvidi.com/MyWorld/Users/9/c/4/23951_130467800317377272639_Original.jpg';
+				puzzle.run(IMG
+					, document.getElementById('puzzle')
+					, [6, 6]
+					, callbacks				
+					, null
+				);
+				break;
+			case 'phuzzle2':	
+				IMG = 'http://storage1.tvidi.com/MyWorld/Users/9/c/7/23951_130547362278641199114_Original.jpg';
+				puzzle.run(IMG
+					, document.getElementById('puzzle')
+					, [6, 6]
+					, callbacks				
+					, null
+				);
+				break;
+			default: 
+				IMG = 'http://phuzzle.ru/charactersPromBack.png'
+				twelve.run(IMG
+					, document.getElementById('puzzle')
+					, [4, 3]
+					, callbacks
+					, null
+				);
+				break;	
 		}
+
 		App.cover.off();
 				
 	});
