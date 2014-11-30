@@ -424,7 +424,9 @@ var findPair = (function(){
 						helpNode.style.background = 'black';
 						helpNode.style.opacity = 0;
 						helpNode.style.display = 'none';
-						CONTAINER.appendChild(helpNode);								
+						CONTAINER.appendChild(helpNode);	
+						
+						helpNode.addEventListener('click', htmlLayer.helpHide);	
 
 						helpNode.width = containerWidth;
 						helpNode.height = containerHeight;
