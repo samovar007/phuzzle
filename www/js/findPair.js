@@ -259,7 +259,7 @@ var findPair = (function(){
 					
 					var ctx = _node.getContext('2d');
 					//для начала заполним фон канвы
-					ctx.fillStyle="#555555";
+					ctx.fillStyle="#000000";
 					//Вычисляем поворот
 					var rectW = Math.abs(Math.cos(_angle) * _chunkW)
 						, rectX = (_chunkW - rectW)/2;
