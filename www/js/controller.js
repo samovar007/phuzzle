@@ -138,54 +138,80 @@
 
 
 		var gameType = complexityAr[complexityIdx].game;
+		var helpButtonNode = document.getElementById('puzzleHelp');
+		var containerNode = document.getElementById('puzzle');
 		switch (gameType) {
 			case 'puzzle':
 				puzzle.run(getVars.img
-					, document.getElementById('puzzle')
+					, containerNode
 					, complexityAr[complexityIdx].complexity
 					, callbacks				
-					, document.getElementById('puzzleHelp')
+					, helpButtonNode
 				);
 				break;
 			case 'twelve':
 				twelve.run(getVars.img
-					, document.getElementById('puzzle')
+					, containerNode
 					,  complexityAr[complexityIdx].complexity
 					, callbacks
-					, document.getElementById('puzzleHelp')
+					, helpButtonNode
 				);
 				break;
 			case 15:
 				fifteen.run(getVars.img
-					, document.getElementById('puzzle')
+					, containerNode
 					, callbacks				
-					, document.getElementById('puzzleHelp')
+					, helpButtonNode
 				);
 				break;
 			case 'phertish':
 				phertish.run(getVars.img
-					, document.getElementById('puzzle')
+					, containerNode
 					,  complexityAr[complexityIdx].complexity
 					, callbacks
-					, document.getElementById('puzzleHelp')
+					, helpButtonNode
 				);
 				break;
 			case 'untuck':
 				untuck.run(getVars.img
-					, document.getElementById('puzzle')
+					, containerNode
 					,  complexityAr[complexityIdx].complexity
 					, callbacks
-					, document.getElementById('puzzleHelp')
+					, helpButtonNode
 				);
 				break;
 			case 'findPair':
 				var cr = complexityAr[complexityIdx].complexity;
 				callbacks.onWin = callbacks.winWithSteps;
-				findPair.run(document.getElementById('puzzle')
+				
+				findPair.run(getVars.img
+					, containerNode
 					, {colums: cr[0], rows: cr[1]}
-					, getVars.img
 					, callbacks
 				);
+				$(window).on('resize', function() {
+					findPair.redraw();
+				});			
+				$(window).on('orientationchange', function() {
+					//Без таймаута на моем планшете работает не верно
+					setTimeout(findPair.redraw, 200);
+				});
+				
+				//@todo - хорошо бы это распространить на все игры!
+				var currentGame = findPair;
+				if (!currentGame.help) {
+					helpButtonNode.style.display = 'none';
+				} else {
+					if (!!('ontouchstart' in window)) {	//touch screen
+						helpButtonNode.addEventListener('click', currentGame.help.trigger);	
+
+					} else {
+						helpButtonNode.addEventListener('mousedown', currentGame.help.show);		
+						helpButtonNode.addEventListener('mouseup', currentGame.help.hide);
+						helpButtonNode.addEventListener('mouseleave', currentGame.help.hide);
+					}					
+				}
+	
 				break;
 		}
 	});
