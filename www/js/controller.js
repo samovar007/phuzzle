@@ -31,6 +31,7 @@
 			, {complexity: [3, 3, 1], describe: 'Фёртыш 3x3', game: 'phertish'}
 			, {complexity: [5, 5, 1], describe: 'Фёртыш 5x5', game: 'phertish'}
 			, {complexity: [3, 3, 1], describe: 'Раскладушка', game: 'untuck'}
+			, {complexity: [4, 3], describe: 'Найди пару', game: 'findPair'}
 			
 		];
 	//Если каких-то данных нет...
@@ -82,42 +83,59 @@
 		App.storeLastComplexity(complexityIdx);
 		showStep2(getVars.img, complexityIdx);
 		App.cover.text('Загружаю рисунок...');
+		
+		
+		function commonOnWin(_phraseForSharing, _phraseForWnd) {
+			App.sharing.init(location.protocol + '//' + location.host + '/toSn/' + location.search
+				, 'Фазлы - головоломки из любого изображения'
+				, getVars.img
+				, _phraseForSharing
+			);
+			var wndBody	= _phraseForWnd
+				+ ' Поделитесь своим успехом с друзьями!'
+				+ '<div id="sharingContainer">'
+				+ '<a target=_blank href="#" class="snicon vk" appSharingType="vk" onclick="return App.sharing.onclick(this);"></a>'
+				//+ '<a target=_blank href="#" class="snicon ok" appSharingType="ok" onclick="return App.sharing.onclick(this);"></a>'
+				+ '<div id="ok-sharing-widget" class="snicon ok" style="display: inline-block"></div>'
+				+ '<a target=_blank href="#" class="snicon mr" appSharingType="mr" onclick="return App.sharing.onclick(this);"></a>'
+				+ '<a target=_blank href="#" class="snicon gg" appSharingType="gg" onclick="return App.sharing.onclick(this);"></a>'
+				+ '<a target=_blank href="#" class="snicon fb" appSharingType="fb" onclick="return App.sharing.onclick(this);"></a>'
+				+ '<a target=_blank href="#" class="snicon tw" appSharingType="tw" onclick="return App.sharing.onclick(this);"></a>'
+				+ '</div>'
+				+ '<p>Или разместите <a href="' + location.href + '">ссылку</a> самостоятельно.</p>' 
+				+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
+			App.cover.wnd('Пазл собран!', wndBody);
+
+			OK.CONNECT.insertShareWidget("ok-sharing-widget"
+				, App.sharing.url.replace(/http%3A/, '')	//одноглазники не шарят, если есть http
+				, "{width:32,height:32,st:'rounded',sz:30,nt:1,nc:1}");
+			if (ga) {
+				ga('send', 'event', 'puzzleComplete', complexityIdx);
+			}
+		}
+		
+		
 		var callbacks = {	
 			win: function(_msec) {
 				var s = Math.floor(_msec/1000);
-				if (ga) {
-					ga('send', 'event', 'puzzleComplete', complexityIdx);
-				}
-
-				App.sharing.init(location.protocol + '//' + location.host + '/toSn/' + location.search
-					, 'Фазлы - головоломки из любого изображения'
-					, getVars.img
-					, 'Я собрал этот пазл за ' + s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''})
-				);
-				var wndBody	= 'Вы справились с заданием за '
-					+ s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''})
-					+ '! Поделитесь своим успехом с друзьями!'
-					+ '<div id="sharingContainer">'
-					+ '<a target=_blank href="#" class="snicon vk" appSharingType="vk" onclick="return App.sharing.onclick(this);"></a>'
-					//+ '<a target=_blank href="#" class="snicon ok" appSharingType="ok" onclick="return App.sharing.onclick(this);"></a>'
-					+ '<div id="ok-sharing-widget" class="snicon ok" style="display: inline-block"></div>'
-					+ '<a target=_blank href="#" class="snicon mr" appSharingType="mr" onclick="return App.sharing.onclick(this);"></a>'
-					+ '<a target=_blank href="#" class="snicon gg" appSharingType="gg" onclick="return App.sharing.onclick(this);"></a>'
-					+ '<a target=_blank href="#" class="snicon fb" appSharingType="fb" onclick="return App.sharing.onclick(this);"></a>'
-					+ '<a target=_blank href="#" class="snicon tw" appSharingType="tw" onclick="return App.sharing.onclick(this);"></a>'
-					+ '</div>'
-					+ '<p>Или разместите <a href="' + location.href + '">ссылку</a> самостоятельно.</p>' 
-					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
-				App.cover.wnd('Пазл собран!', wndBody);
-
-				OK.CONNECT.insertShareWidget("ok-sharing-widget"
-					, App.sharing.url.replace(/http%3A/, '')	//одноглазники не шарят, если есть http
-					, "{width:32,height:32,st:'rounded',sz:30,nt:1,nc:1}");
+				commonOnWin
+					( 'Я собрал этот пазл за ' + s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''})
+					, 'Вы справились с заданием за ' + s + ' секунд' + App.wordEnding(s, {one: 'у', some: 'ы', many: ''}) + '!'
+					);
+			}
+			, winWithSteps: function(_steps) {
+				commonOnWin
+					( 'Я выполнил задание за ' + _steps + ' шаг' + App.wordEnding(_steps, {one: '', some: 'а', many: 'ов'})
+					, 'Вы справились с заданием за ' + _steps + ' шаг' + App.wordEnding(_steps, {one: '', some: 'а', many: 'ов'}) + '!'
+					);
 			}
 			, successLoad: function() {
 				App.cover.off();
 			} 
 		};
+
+
+
 
 		var gameType = complexityAr[complexityIdx].game;
 		switch (gameType) {
@@ -158,6 +176,15 @@
 					,  complexityAr[complexityIdx].complexity
 					, callbacks
 					, document.getElementById('puzzleHelp')
+				);
+				break;
+			case 'findPair':
+				var cr = complexityAr[complexityIdx].complexity;
+				callbacks.onWin = callbacks.winWithSteps;
+				findPair.run(document.getElementById('puzzle')
+					, {colums: cr[0], rows: cr[1]}
+					, getVars.img
+					, callbacks
 				);
 				break;
 		}
