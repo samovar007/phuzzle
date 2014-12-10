@@ -1,6 +1,7 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Найди пару
+ * @author: Samoylov Vasily
+ * devphuzzle@gmail.com
  */
 var findPair = (function(){
 	
