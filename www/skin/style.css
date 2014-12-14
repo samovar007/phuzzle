@@ -498,3 +498,50 @@ h2{
 	position: relative;
 }
 
+/* balls */
+.ballContainer {
+	position: relative;
+}
+.ballContainer canvas {
+	margin: 0; 	padding: 0; 
+	position: absolute;
+	top: 0; left: 0;
+	background: transparent;
+}
+.ballContainer  .ball {
+	z-index: 3;
+}
+.ballContainer  .fishka {
+	z-index: 5;
+}
+.ballContainer .tablo, .ballContainer .fieldContainer, .ballContainer .lives, .ballContainer .pointers {
+	margin: 0; padding: 0; border: 0;
+	overflow: hidden;
+}
+.ballContainer .fieldContainer {
+	position: relative;
+	background-color: white;
+}
+.ballContainer .lives {
+	float: left;
+}
+.ballContainer .lives .fishka {
+	position: static;
+	float: left;
+}
+.ballContainer .pointers {
+	float: right;
+	text-align: right;
+}
+/** Для тестирования: **/
+.ballContainer .fieldContainer .cellBorder {
+	position: absolute; z-index: 10; border: 1px solid white;
+	margin: 0; padding: 0;
+} 
+.ballContainer .tablo .showCoord {
+	float: left;
+	font-size: 10px;
+	margin: 0; padding: 0;
+	margin-left: 2em;
+}
+/* *** */

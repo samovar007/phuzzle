@@ -21,6 +21,8 @@
 }(document);
 
 
+var Site = Site || App;
+
 (function($) {
 	var  complexityAr = [{complexity: [3, 3], describe: 'Фазл 3x3', game: 'puzzle'}
 			, {complexity: [6, 6], describe: 'Фазл 6x6', game: 'puzzle'}
@@ -32,7 +34,7 @@
 			, {complexity: [5, 5, 1], describe: 'Фёртыш 5x5', game: 'phertish'}
 			, {complexity: [3, 3, 1], describe: 'Раскладушка', game: 'untuck'}
 			, {complexity: [4, 3], describe: 'Найди пару', game: 'findPair'}
-			
+			, {complexity: true, describe: 'Шарики', game: 'balls'}
 		];
 	//Если каких-то данных нет...
 	function showStep1() {
@@ -129,9 +131,21 @@
 					, 'Вы справились с заданием за ' + _steps + ' шаг' + App.wordEnding(_steps, {one: '', some: 'а', many: 'ов'}) + '!'
 					);
 			}
+			, winWithPointers: function(_pointers) {
+				var wordWithEnd = _pointers + ' очк' + App.wordEnding(_pointers, {one: 'о', some: 'а', many: 'ов'});
+				commonOnWin
+					( 'Я набрал ' + wordWithEnd
+					, 'Вы справились с заданием и набрали ' + wordWithEnd + '!'
+					);
+			}
 			, successLoad: function() {
 				App.cover.off();
 			} 
+			, onLoss: function() {
+				var wndBody	= ' К сожалению вы проиграли. Попробуйте еще раз!'
+					+ '<footer><a href="" class="btn">Ещё раз</a> <a href="/getPhotos/' + App.getLastSource() + '/" class="btn">Другое фото</a></footer>';
+				App.cover.wnd('Вы проиграли :(', wndBody);
+			}
 		};
 
 
@@ -211,8 +225,23 @@
 						helpButtonNode.addEventListener('mouseleave', currentGame.help.hide);
 					}					
 				}
-	
 				break;
+			case 'balls':
+				callbacks.onWin = callbacks.winWithPointers;
+				ballsGame.run(getVars.img
+					, containerNode
+					,  {cellSz: 20, w: 50, h: 30, lives: 3, percentToWin: 75, balls: 3}
+					, callbacks
+				);
+				$(window).on('resize', function() {
+					ballsGame.redraw();
+				});			
+				$(window).on('orientationchange', function() {
+					//Без таймаута на моем планшете работает не верно
+					setTimeout(ballsGame.redraw, 200);
+				});
+				helpButtonNode.style.display = 'none';
+			
 		}
 	});
 }(jQuery));
