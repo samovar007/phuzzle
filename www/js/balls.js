@@ -22,16 +22,6 @@ var ballsGame = (function() {
 		_container.appendChild(node);
 		return node;
 	}
-	/**
-	 * для отдадлочной печати - преобразует объект _xy в удобочитаемую строку
-	 * @returns {String}
-	 */
-	function xy2str(_name, _xy) {
-		if (_name != '') {
-			_name += ' = '; 
-		}
-		return _name + '[' + _xy.x + ', ' + _xy.y + ']';
-	}
 	
 	function createNode(_tagName, _class, _style) {
 		var node = document.createElement(_tagName);
@@ -43,18 +33,6 @@ var ballsGame = (function() {
 		}
 		return node;
 	}
-	/**
-	 * Создает узел документа с заданными параметрами и цепляет его к контейнеру
-	 * @param {DOM object} _container
-	 * @param {String} _class
-	 * @param {Object} _style
-	 * @returns {DOM object}
-	 */
-	function addDivToContainer(_container, _class, _style) {
-		return _container.appendChild(createNode('div', _class, _style));
-	}
-		
-
 
 	/**
 	 * Создает объект поля игры
@@ -422,7 +400,7 @@ var ballsGame = (function() {
 			//раскрашиваем жизнь в красный цвет. Или вообще можно скрыть
 			livesCnt --;
 			drawFishkaNode(livesFishka[livesCnt], ['#993333', '#330000']);
-			if ( 0 == livesCnt) {
+			if (0 == livesCnt) {
 				stopFlag = true;
 				_callbacks.onLoss ? _callbacks.onLoss() : (function() {
 					if (confirm('YOU LOSER :( Again?')) {
@@ -450,7 +428,6 @@ var ballsGame = (function() {
 				}			
 			}
 			//В полученной матрице остались F_FREE те клетки, которые надо превратить в стену
-			//заодно тут посчитаем процент заполненых клеток
 			var maskCells = F_FREE | F_PROCESS;
 			var nowOpeningCells = 0;
 			for (var x=0; x<matrix.length; x ++) {
@@ -753,11 +730,9 @@ var ballsGame = (function() {
 							}	
 							//теперь из выбранных сравниваем, кто стукнется быстрее, к примеру по OX
 							//ПОМНИМ! что удар в theBestDxFromX приходится по Y
-							//ddxy.x / dxy.x = ddxy.y / dxy.y => 
-							//ddxy.y =  ddxy.x * dxy.y / dxy.x
+							//ddxy.x / dxy.x = ddxy.y / dxy.y   =>   ddxy.y =  ddxy.x * dxy.y / dxy.x
 							var theBestDxFromX = Math.abs(Math.round(dCoordByCoord.x * dxy.x / dxy.y))
 								, theBestDxFromY = Math.abs(dCoordByCoord.y); 
-								
 								
 							if (theBestDxFromX == theBestDxFromY) {
 								//Нам все равно, с какой точкой работать. Т.о. можно убрать все точки, кроме одной. 
@@ -807,8 +782,7 @@ var ballsGame = (function() {
 							}
 							//приращение до точки столкновения
 							//одну координату знаем, другую вычисляем по пропорции
-							//ddxy.x / dxy.x = ddxy.y / dxy.y => 
-							//ddxy.y =  ddxy.x * dxy.y / dxy.x
+							//ddxy.x / dxy.x = ddxy.y / dxy.y		=>		ddxy.y =  ddxy.x * dxy.y / dxy.x
 							//и наоборот
 							var ddxy = {};
 							//здесь определяем, чколько надо пролететь шарику до удара о стену
@@ -844,7 +818,6 @@ var ballsGame = (function() {
 						}
 					}	
 				} while (!canChangeBall);	//Конец итераций по шарику на одном шаге
-
 				//Рисуем шарик
 				currentBall.reshow();
 			}
@@ -855,8 +828,6 @@ var ballsGame = (function() {
 		function runSteps() {
 			if (oneStep()) {
 				Site.newFrame(runSteps);
-			} else {
-				//console.log('exit runSteps');
 			}	
 		}
 		function begin() {
@@ -940,16 +911,9 @@ var ballsGame = (function() {
 							);
 					}			
 				}
-				//для того, чтоб при ресайзе не вызывались runSteps по несколько раз
-				Site.newFrame(function() {
-					//первый фрейм пропускаем
-					Site.newFrame(function() {
-						//во втором фрейме снимаем флаг останова и запускаем шаги
-						stopFlag = false;
-						field.reshowAll();
-						runSteps();
-					});
-				});
+				stopFlag = false;
+				field.reshowAll();
+				runSteps();
 				//---
 		}
 		
@@ -970,7 +934,7 @@ var ballsGame = (function() {
 				if (timeoutRes) {
 					clearTimeout(timeoutRes);
 				}
-				timeoutRes = setTimeout(begin, 200);
+				timeoutRes = setTimeout(begin, 100);
 			}
 		};
 		return interface;
