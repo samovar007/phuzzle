@@ -230,7 +230,8 @@ var Site = Site || App;
 				callbacks.onWin = callbacks.winWithPointers;
 				ballsGame.run(getVars.img
 					, containerNode
-					,  {cellSz: 20, w: 50, h: 30, lives: 3, percentToWin: 75, balls: 3}
+					//,  {w: 50, h: 30, lives: 3, percentToWin: 75, balls: 3}
+					,  {w: 30, h: 15, lives: 3, percentToWin: 75, balls: 3, velocityKoef: .7}
 					, callbacks
 				);
 				$(window).on('resize', function() {
@@ -241,7 +242,6 @@ var Site = Site || App;
 					setTimeout(ballsGame.redraw, 200);
 				});
 				helpButtonNode.style.display = 'none';
-			
 		}
 	});
 }(jQuery));

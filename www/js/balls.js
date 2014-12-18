@@ -142,15 +142,9 @@ var ballsGame = (function() {
 				}	
 				
 				//Вектор для направлений
-				var vectors = [], vectorsSz;
-				for (var x=-1; x < 2; x ++) {
-					for (var y=-1; y < 2; y++) {
-						if (x || y) {
-							vectors.push([x, y]);
-						}
-					}
-				}
-				vectorsSz = vectors.length; // =8
+				//Мы недолжны ходить по диагонали
+				var vectors = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+					, vectorsSz = vectors.length;
 				
 				var stack = [];
 				var curX = _xy.x
@@ -160,7 +154,6 @@ var ballsGame = (function() {
 					, nextY = 0
 					;
 				_matrix[_xy.x][_xy.y] = F_MARKED;	
-				
 				while (true) {
 					if (curIdx < vectorsSz) {
 						//проверяем новую клетку
@@ -168,7 +161,6 @@ var ballsGame = (function() {
 						nextY = curY + vectors[curIdx][1];
 						curIdx ++;
 						if (F_FREE != _matrix[nextX][nextY]) {
-						//if (!(maskForMark & _matrix[nextX][nextY])) {
 							continue;
 						}
 						//Переход на новую клетку
@@ -238,14 +230,14 @@ var ballsGame = (function() {
 				//в заменателе корень из суммы квадратов катетов.
 				//Уменьшаем скорость на -1 для того, чтоб при добавллении ошибки округления не выйти за границу
 				koef = (_velocity) / Math.sqrt(Math.pow(speed.x, 2) + Math.pow(speed.y, 2));
-			}
+			};
 			this.reshow = function() {
 				node.style.left = currentX + 'px';
 				node.style.top = currentY + 'px';
-			}
+			};
 			this.getNode = function() {
 				return node;
-			}
+			};
 
 			this.reinit(_x, _y, _velocity, _node);
 			
@@ -348,6 +340,7 @@ var ballsGame = (function() {
 			, TOTAL_LIVES = _params.lives || 5
 			, PERCENT2WIN = _params.percentToWin || 67	//открыть надо не менее 2/3
 			, ballsCnt = _params.balls || 5
+			, velocityKoef = Math.min(1, Math.max(.1, _params.velocityKoef || 1))
 			;
 			
 		//Объявляем переменные, небходимые в различных методах отдаваемого объекта
@@ -469,8 +462,9 @@ var ballsGame = (function() {
 						animationHideFieldOnWin(function(){
 							_callbacks.onWin ? _callbacks.onWin(calculatePointers(OPENED_CELLS)) : alert('YOU WIN!');	
 						});
-
 						stopFlag = true;
+						pauseFlag = false;
+						return;
 					} else {
 						setTimeout(revertPause, 100);
 					}	
@@ -662,8 +656,8 @@ var ballsGame = (function() {
 
 							if (!dCoord) {
 								//Координата клетки не менялась
-								if (curChp[dxyKey] == field.oneCellToCoord(nextCell[dxyKey])) { // && curCellForChp[nameOxy] != nextCell[nameOxy]) {
-									//чекпоинт лежит на границе со следующей клеткой, и следующая клетка не = текущей, 
+								if (curChp[dxyKey] == field.oneCellToCoord(nextCell[dxyKey]) && dxy[dxyKey]) { 
+									//чекпоинт лежит на границе со следующей клеткой, и следующая клетка не = текущей и есть приращение по координате
 									//то столкновение надо проверять (но надо постараться избавиться от проверки на 0 здесь)
 									var dDxyKeyCell = dxy[dxyKey] > 0 ? -1 : 1;
 									neighborXy[dxyKey] = nextCell[dxyKey] + dDxyKeyCell;
@@ -675,6 +669,7 @@ var ballsGame = (function() {
 								neighborXy[dxyKey] = curCellForChp[dxyKey];
 							}	
 							//Смотрим на соседа только  если менялась координата клетки. Иначе у нас касание
+							//ЗДЕСЬ может вылезти за границу! если dxy[dxyKey]==0
 							if (F_WALL == field.getXy(neighborXy)) {
 								//грань закрыта, от нее не могло отскочить
 								continue;
@@ -825,11 +820,6 @@ var ballsGame = (function() {
 		}
 		//---
 		
-		function runSteps() {
-			if (oneStep()) {
-				Site.newFrame(runSteps);
-			}	
-		}
 		function begin() {
 				_container.innerHTML = '';
 				//---
@@ -842,15 +832,14 @@ var ballsGame = (function() {
 						cellSz + ' получается меньше допустимого ' + minCellSz);
 					return;		
 				}
-
 				RADIUS = Math.floor(cellSz/2)-1;
 				ballsDiam = RADIUS * 2;
-				maxBallsVelocity = RADIUS;	//Math.max(3, Math.round(2 * RADIUS / 3));
+				maxBallsVelocity = Math.max(3, Math.round(RADIUS * velocityKoef));
 				tabloNode = _container.appendChild(createNode('div', 'tablo',
 					{ width: cellSz * WIDTH + 'px'
-					//, height: cellSz * 1.5 + 'px'
+					, height: 2 * cellSz + 'px'
 					, paddingTop: Math.floor(cellSz/2) + 'px'
-					, paddingBottom: Math.floor(cellSz/2) + 'px'
+					//, paddingBottom: Math.floor(cellSz/2) + 'px'
 					, fontSize: cellSz + 'px'
 					}));
 				livesNode = tabloNode.appendChild(createNode('div', 'lives', {width: cellSz * TOTAL_LIVES + 'px', marginLeft: cellSz + 'px'}));
@@ -888,7 +877,7 @@ var ballsGame = (function() {
 					resizeCanvas(createCanvas(fieldContainerNode, 'fishka'), cellSz, cellSz)
 					, ['#ccccff', '#3333aa']
 				);
-				fishka = createFishka(fishkaNode, field, 
+				fishka = createFishka(fishkaNode, fieldContainerNode, field, 
 					{ onConstructComplete: onConstructComplete
 					, checkLoser: checkLoser
 					});
@@ -916,7 +905,15 @@ var ballsGame = (function() {
 				runSteps();
 				//---
 		}
-		
+
+		function runSteps() {
+			if (oneStep()) {
+				Site.newFrame(runSteps);
+			} else {
+				fishka.onStop();
+			}	
+		}
+			
 		var timeoutRes;
 		/**
 		 * Интерфейс взаимодействия со всем хозяйством
@@ -931,6 +928,7 @@ var ballsGame = (function() {
 				//В даном случае необходимо сделать паузу, т.к. вызывается при изменении размеров окна 
 				//и может прийти оч. много событий - обрабатываем последнее
 				stopFlag = true;
+				fishka.onStop();
 				if (timeoutRes) {
 					clearTimeout(timeoutRes);
 				}
@@ -943,14 +941,16 @@ var ballsGame = (function() {
 	 * Возвращает интерфейс взаимодействия с фишкой
 	 * @returns {Object}
 	 */
-	var createFishka = function(_fishkaNode, _field, _callbacks) {
-		var MOVE_STOP = 0;
+	var createFishka = function(_fishkaNode, _fieldContainer, _field, _callbacks) {
+		var MOVE_STOP = 0, MOVE_LEFT = 37, MOVE_RIGHT = 39, MOVE_UP = 38, MOVE_DOWN=40;
 		var currentMove = MOVE_STOP
 			, cellSz = _field.getCellSize()
 			, velocity = Math.round(cellSz / 3)
 			, processCells = []	//сюда будем класть строящиеся клетки
 			, radius = Math.round(cellSz / 2);
 			;
+
+		var holdCell = false;	//при работе с тач-интерфейсом запоминаем позицию (клетки)
 		
 		var currentCell = {x: 0, y: 0}; // Клетка, в которой находится часть фишки по направлению движения либо вся фишка
 		var ltCoordX = 0, ltCoordY = 0;	//где находится левый верхний угол фишки
@@ -986,24 +986,172 @@ var ballsGame = (function() {
 			return {x: (_x + (v.x > 0 ? cellSz : 0)), y: (_y + (v.y > 0 ? cellSz : 0))};
 		}
 		
-		document.addEventListener('keydown', function(_e) {
-			if (moveVector[_e.keyCode]) {
-				//Здесь надо смотреть, если меняется мув, то перескакивать на 
-				//окончательную позицию в клетке. Помимо этого надо проверять, то же самое, что и в onStep
-				//А может и не надо, достаточно спозиционировать фишку куда надо - текущая клетка не меняется, надо полностью ее туда положить
-				if (currentMove != _e.keyCode) {
-					toBeginOfCurrentCell();
-				}	
-				currentMove = _e.keyCode;
+		function changeDirection(_newMove) {
+			if (currentMove == _newMove) {
+				return false;
 			}
-		});		
-		
-		document.addEventListener('keyup', function(_e) {
-			if (F_WALL == _field.getXy(currentCell)) { 
-				//останавливаемся только если находимся на стене
+			if (MOVE_STOP == _newMove) {
 				setMoveStop();
+			} else {
+				toBeginOfCurrentCell();
 			}	
-		});
+			currentMove = _newMove;
+			return true;
+		}
+		
+		var handlers = {
+			keyDown: function(_e) {
+				if (moveVector[_e.keyCode]) {
+					changeDirection(_e.keyCode);
+				}
+			}
+			, keyUp: function() {
+				if (F_WALL == _field.getXy(currentCell)) { //останавливаемся только если находимся на стене
+					setMoveStop();
+				}	
+			}
+			, mouseDown: function(_e) {
+				setHoldCellFromFieldContainerTouch(_e.pageX, _e.pageY);
+				tryChangeCurrentMoveFromHoldCell();
+				_e.preventDefault();
+				return false;
+			}
+			, mouseUp: function(_e) {
+				holdCell = false;
+				if (F_WALL == _field.getXy(currentCell)) { 
+					//останавливаемся только если находимся на стене
+					setMoveStop();
+				}	
+				_e.preventDefault();
+				return false;
+			}
+			, mouseMove: function(_e) {
+				if (1 & _e.buttons) {
+					setHoldCellFromFieldContainerTouch(_e.pageX, _e.pageY);
+					if (MOVE_STOP == currentMove) {
+						tryChangeCurrentMoveFromHoldCell();
+					}
+				}	
+				_e.preventDefault();
+				return false;
+			}
+			,  touchStart: function(_e) {
+				setHoldCellFromFieldContainerTouch(_e.touches[0].pageX, _e.touches[0].pageY);
+				tryChangeCurrentMoveFromHoldCell();
+				_e.preventDefault();
+				return false;
+			}
+			, touchMove: function(_e) {
+				setHoldCellFromFieldContainerTouch(_e.touches[0].pageX, _e.touches[0].pageY);
+				if (MOVE_STOP == currentMove) {
+					tryChangeCurrentMoveFromHoldCell();
+				}
+				_e.preventDefault();
+				return false;
+			}
+		}
+		
+		/**
+		 * Устанавливает обработчики на события
+		 * @returns {undefined}
+		 */
+		function setHandlers() {
+			document.addEventListener('keydown', handlers.keyDown);
+			document.addEventListener('keyup', handlers.keyUp);
+			if (!!('ontouchstart' in window)) {	//touch screen
+				_fieldContainer.addEventListener('touchstart', handlers.touchStart);		
+				_fieldContainer.addEventListener('touchmove', handlers.touchMove);
+				_fieldContainer.addEventListener('touchend', handlers.mouseUp);		
+			} else {
+				_fieldContainer.addEventListener('mousedown', handlers.mouseDown);
+				_fieldContainer.addEventListener('mouseup',  handlers.mouseUp);
+				_fieldContainer.addEventListener('mousemove',handlers.mouseMove);		
+				_fieldContainer.addEventListener('mouseleave',  handlers.mouseUp);
+			}	
+		}	
+
+		function removeHandlers() {
+			document.removeEventListener('keydown', handlers.keyDown);
+			document.removeEventListener('keyup', handlers.keyUp);
+			if (!!('ontouchstart' in window)) {	//touch screen
+				_fieldContainer.removeEventListener('touchstart', handlers.touchStart);		
+				_fieldContainer.removeEventListener('touchmove', handlers.touchMove);
+				_fieldContainer.removeEventListener('touchend', handlers.mouseUp);		
+			} else {
+				_fieldContainer.removeEventListener('mousedown', handlers.mouseDown);
+				_fieldContainer.removeEventListener('mouseup',  handlers.mouseUp);
+				_fieldContainer.removeEventListener('mousemove',handlers.mouseMove);		
+				_fieldContainer.removeEventListener('mouseleave',  handlers.mouseUp);
+			}	
+		}	
+		
+		 setHandlers();
+
+		/**
+		 * Для мыши и тач-интерфейса
+		 * Определяем, в какую сторону необходимо двигаться исходя из расположения holdCell
+		 * @returns {Number}
+		 */
+		function determineDirectionByHoldCell() {
+			var dx = holdCell.x - currentCell.x
+				, dy = holdCell.y - currentCell.y
+				;
+			if (!dx && !dy) {
+				return MOVE_STOP;
+			}	
+			//надо понять, в какую сторону ПРЕДПОЛОЖИТЕЛЬНО будем двигаться
+			if (Math.abs(dx) > Math.abs(dy)) {
+				return dx >0 ? MOVE_RIGHT : MOVE_LEFT;
+			} else {
+				return dy >0 ? MOVE_DOWN : MOVE_UP;
+			}
+		}
+		
+		function setHoldCellFromFieldContainerTouch(_x, _y) {
+			var containerBox = _fieldContainer.getBoundingClientRect();
+			holdCell = 
+				{ x: _field.oneCoordToCell(_x - containerBox.left)
+				, y: _field.oneCoordToCell(_y - containerBox.top)
+				};
+		}
+		
+		/**
+		 * Для мыши и тач-интерфейса
+		 * Реакция на событие перетаскивания указателя мыши или пальца
+		 * @param {Integer} _x
+		 * @param {Integer} _y
+		 * @returns {Boolean} - Было ли изменено направление движения
+		 */
+		function tryChangeCurrentMoveFromHoldCell() {
+			var currentDirection
+				, otherDirection
+				, newMove = determineDirectionByHoldCell()
+				;
+
+			//Если текущее направление движения не в 
+			//противоположную сторону - продолжаем двигаться
+			if (MOVE_STOP != currentMove) {
+				if (MOVE_STOP == newMove) {
+					return changeDirection(newMove);
+				}
+				currentDirection = moveVector[currentMove].x ? 'x' : 'y';
+				otherDirection = moveVector[currentMove].x ? 'y' : 'x';
+				//количество шагов до достижения точки нажатия фишкой по оси, 
+				//по которой сейчас движимся. Здесь важен знак, если положительный, 
+				//то эту координату достигнем когда-нить
+				var steps = (holdCell[currentDirection] - currentCell[currentDirection]) / moveVector[currentMove][currentDirection];
+				if (steps > 0) {
+					return false;	//Продолжаем двигаться, пока не достигнем нужной координаты
+				} else {	
+					//сдвинули таким образом, что координату никогда не достигнем или уже на ней, 
+					//надо менять направление движения. Но тут будем выбирать, на какое.
+					//не рассматриваем случай, когда мышь над фишкой, т.к. он рассмотрен в determineDirectionByHoldCell
+					return changeDirection(newMove);
+				}
+			} else {
+				return changeDirection(newMove);
+			}
+		}
 		
 		/**
 		 * Вызывается, когда текущая клетка либо меняется либо находимся полностью в ней 
@@ -1053,9 +1201,12 @@ var ballsGame = (function() {
 					;
 				if (!_field.inField(nextCellX, nextCellY)) {
 					//выход за границы
-					currentMove = MOVE_STOP;
-					toBeginOfCurrentCell();	//надо, т.к. могди стоять и не на границе с текущей 
-					stayInCurrentCell();
+					if (holdCell) {
+						tryChangeCurrentMoveFromHoldCell();
+					} else {
+						setMoveStop();
+						stayInCurrentCell();
+					}	
 					showFishka();
 					return;
 				}
@@ -1067,6 +1218,15 @@ var ballsGame = (function() {
 						showFishka();
 						return;
 					}
+					
+					if (holdCell) {
+						//Если работали с мышью или тач-интерфейсом
+						if (tryChangeCurrentMoveFromHoldCell()) {
+							showFishka();
+							return;
+						} 
+					}	
+					
 					currentCell.x = nextCellX;
 					currentCell.y = nextCellY;
 					
@@ -1093,11 +1253,15 @@ var ballsGame = (function() {
 				currentMove = MOVE_STOP;
 				currentCell.x = lastPositionInWall.x;
 				currentCell.y = lastPositionInWall.y;
+				holdCell = false;
 				toBeginOfCurrentCell();
 				showFishka();
 				_callbacks.checkLoser();
 				
 				return this.getPositionProperty();
+			}
+			, onStop: function() {
+				removeHandlers();
 			}
 			, getPositionProperty: function() {
 				return {x: ltCoordX + radius, y: ltCoordY + radius, r: radius, currentCellType: _field.getXy(currentCell)};
