@@ -106,11 +106,12 @@ var ballsGame = (function() {
 						break;
 					case F_PROCESS:
 						ctx.clearRect(lCoord, tCoord,  _cellSz, _cellSz);
-						ctx.fillStyle = 'rgba(0, 0, 0, .5)';	
+						ctx.fillStyle = 'rgba(0, 0, 0, .3)';	
 						ctx.fillRect(lCoord, tCoord,  _cellSz, _cellSz);
 						break;
 					case F_FREE:
-						ctx.fillStyle = '#333333';	
+						//ctx.fillStyle = '#000000';	
+						ctx.fillStyle = 'rgba(0, 0, 0, .9)';	
 						ctx.fillRect(lCoord, tCoord,  _cellSz, _cellSz);
 						break;
 				}
@@ -318,7 +319,7 @@ var ballsGame = (function() {
 			( d / 3, d / 3, d / 6, _radius, _radius, _radius
 				);
 		radgrad.addColorStop(0, '#cccccc');
-		radgrad.addColorStop(0.9, '#333333');
+		radgrad.addColorStop(0.9, '#555555');
 		radgrad.addColorStop(1, 'rgba(0,0,0,0)');	
 		ctx.fillStyle = radgrad;
 		ctx.fillRect(0, 0, d, d);
@@ -392,7 +393,7 @@ var ballsGame = (function() {
 		function checkLoser() {
 			//раскрашиваем жизнь в красный цвет. Или вообще можно скрыть
 			livesCnt --;
-			drawFishkaNode(livesFishka[livesCnt], ['#993333', '#330000']);
+			drawFishkaNode(livesFishka[livesCnt], ['#cc3333', '#550000']);
 			if (0 == livesCnt) {
 				stopFlag = true;
 				_callbacks.onLoss ? _callbacks.onLoss() : (function() {
@@ -868,14 +869,16 @@ var ballsGame = (function() {
 				for (var i=0; i<TOTAL_LIVES; i++) {
 					livesFishka[i] = drawFishkaNode( 
 						resizeCanvas(createCanvas(livesNode, 'fishka'), cellSz, cellSz)
-						, ['#ccffcc', '#33aa33']
+						//, ['#50c9a1', '#337755']
+						, ['#70ffdd', '#337755']
 						);		
 				}
 				livesCnt = TOTAL_LIVES;
 
 				var fishkaNode = drawFishkaNode(
 					resizeCanvas(createCanvas(fieldContainerNode, 'fishka'), cellSz, cellSz)
-					, ['#ccccff', '#3333aa']
+					//, ['#ccccff', '#3333aa']
+					, ['#70ffdd', '#337755']
 				);
 				fishka = createFishka(fishkaNode, fieldContainerNode, field, 
 					{ onConstructComplete: onConstructComplete

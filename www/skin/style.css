@@ -518,6 +518,10 @@ h2{
 	margin: 0; padding: 0; border: 0;
 	overflow: hidden;
 }
+.ballContainer .tablo {
+/*	border: 3px double #333;*/
+	
+}
 .ballContainer .fieldContainer {
 	position: relative;
 	background-color: white;

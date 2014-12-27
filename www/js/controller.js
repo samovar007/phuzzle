@@ -24,14 +24,14 @@
 var Site = Site || App;
 
 (function($) {
-	var  complexityAr = [{complexity: [3, 3], describe: 'Фазл 3x3', game: 'puzzle'}
+	var  complexityAr = [{complexity: [3, 3], describe: 'Фазл 3x3', game: 'puzzle', nomenu: 1}
 			, {complexity: [6, 6], describe: 'Фазл 6x6', game: 'puzzle'}
-			, {complexity: [12, 12], describe: 'Фазл 12x12', game: 'puzzle'}
+			, {complexity: [12, 12], describe: 'Фазл 12x12', game: 'puzzle', nomenu: 1}
 			, {complexity: [3, 4], describe: 'Фрубик', game: 'twelve'}
 			, {describe: 'Пятнашки', game: 15}
-			, {complexity: [6, 6, 0], describe: 'Фёртыш детский', game: 'phertish'}
+			, {complexity: [6, 6, 0], describe: 'Фёртыш детский', game: 'phertish', nomenu: 1}
 			, {complexity: [3, 3, 1], describe: 'Фёртыш 3x3', game: 'phertish'}
-			, {complexity: [5, 5, 1], describe: 'Фёртыш 5x5', game: 'phertish'}
+			, {complexity: [5, 5, 1], describe: 'Фёртыш 5x5', game: 'phertish', nomenu: 1}
 			, {complexity: [3, 3, 1], describe: 'Раскладушка', game: 'untuck'}
 			, {complexity: [4, 3], describe: 'Найди пару', game: 'findPair'}
 			, {complexity: true, describe: 'Шарики', game: 'balls'}
@@ -61,6 +61,9 @@ var Site = Site || App;
 		$('#currentImg').val(_imgSrc);
 		var options = '';
 		complexityAr.forEach(function(_el, _idx){
+			if (_el.nomenu) {
+				return;
+			}
 			if (_complexityIdx == _idx) {
 				options += '<span>' + _el.describe + '</span>';
 			} else {
