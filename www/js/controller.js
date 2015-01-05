@@ -48,7 +48,19 @@ var Site = Site || App;
 				str += '<div class="col-xs-4">' + makeLinkToPhuzzle(_el.img.XXXL.href, -1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">') + '</div>';
 			});
 			$container.html(str);
-		}	
+			
+			var gamesMenuAr = []
+				, imgSrc = _data.entries[0].img.XXXL.href
+				;
+			complexityAr.forEach(function(_el, _idx){
+				if (_el.nomenu) {
+					return;
+				}
+				gamesMenuAr.push(makeLinkToPhuzzle(imgSrc, _idx, '&laquo;' + _el.describe + '&raquo;'));
+			});	
+			$('#allGames').html(gamesMenuAr.join(', ') );
+			
+		};	
 		App.jsonp('http://api-fotki.yandex.ru/api/podhistory/?limit=3&format=json&callback=App.showYfd');
 		$('#step1').show();
 		$('#step2').hide();
