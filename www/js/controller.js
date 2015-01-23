@@ -36,6 +36,17 @@ var Site = Site || App;
 			, {complexity: [4, 3], describe: 'Найди пару', game: 'findPair'}
 			, {complexity: true, describe: 'Шарики', game: 'balls'}
 		];
+		
+	function getBigImgHrefFromYandex(_elImg) {
+		var el = ['XXXL', 'XXL', 'XL'];
+		for(var i=0; i<el.length; i++) {
+			var key = el[i];
+			if (_elImg[key] && _elImg[key].href) {
+				return _elImg[key].href;
+			}
+		}
+		return false;	
+	}
 	//Если каких-то данных нет...
 	function showStep1() {
 		App.showYfd = function(_data) {
@@ -45,12 +56,14 @@ var Site = Site || App;
 			}
 			var str = '';
 			_data.entries.forEach(function(_el){
-				str += '<div class="col-xs-4">' + makeLinkToPhuzzle(_el.img.XXXL.href, -1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">') + '</div>';
+				str += '<div class="col-xs-4">' 
+					+ makeLinkToPhuzzle(getBigImgHrefFromYandex(_el.img), -1, '<img src="' + _el.img.S.href + '" title="' + _el.title + '">') 
+					+ '</div>';
 			});
 			$container.html(str);
 			
 			var gamesMenuAr = []
-				, imgSrc = _data.entries[0].img.XXXL.href
+				, imgSrc = getBigImgHrefFromYandex(_data.entries[0].img)
 				;
 			complexityAr.forEach(function(_el, _idx){
 				if (_el.nomenu) {
